@@ -1,0 +1,45 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+      "FUNCTIONS_WORKER_RUNTIME": "python",
+      "AzureWebJobsFeatureFlags": "EnableWorkerIndexing",
+      "DOCGENERATOR_URL": "http://localhost:7071/api/DocGenerator?code=",
+      "AdminPassword": "P@ssw0rd", // Admin Password that is used for protected pages
+      "UploadPassword": "P@ssw0rd", // Upload Password that is used for uploading files
+      "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+      "OpenAiApiKey": "", // OpenAI Key
+      "OpenAiKey": "", // Azure Open AI Key
+      "OpenAiEndPoint": "", // FQDN of Azure Open AI Service
+      "OpenAiVersion": "2023-07-01-preview",
+      "OpenAiEmbedding": "", // Deployment name of Ada-003
+      "FormRecognizerEndPoint": "", // Form Recognizer Endpoint
+      "FormRecognizerKey": "",  // Form Recognizer Key
+      "MaxTokens": 500, 
+      "Temperature": 0.3,
+      "CosmosEndpoint":"https://<>.documents.azure.com:443/",
+      "CosmosKey":"",
+      "CosmosDatabase":"aoai",
+      "CosmosContainer":"chatgpt",
+      "WeatherEndPoint": "https://yahoo-weather5.p.rapidapi.com/weather",
+      "WeatherHost": "yahoo-weather5.p.rapidapi.com",
+      "StockEndPoint": "https://alpha-vantage.p.rapidapi.com/query",
+      "StockHost": "alpha-vantage.p.rapidapi.com",
+      "RapidApiKey": "",
+      "OpenAiChat": "", // GPT 3.5 deployment name
+      "OpenAiDocStorName": "", // Storage name
+      "OpenAiDocStorKey": "", // Storage doc
+      "OpenAiDocStorConnString": "", // Storage connection string
+      "OpenAiDocContainer": "", // Storage Container
+      "KbIndexName" : "aoaikb",
+      "SearchService":"", // Search Service 
+      "SearchKey":"", // Search Key
+      "BingUrl": "https://api.bing.microsoft.com/v7.0/search",
+      "BingKey": ""
+    },
+    "Host": {
+      "LocalHttpPort": 7071,
+      "CORS": "*",
+      "CORSCredentials": false
+    }
+  }
+  
