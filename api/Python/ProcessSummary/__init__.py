@@ -14,6 +14,12 @@ from langchain.docstore.document import Document
 import uuid
 from langchain_openai import OpenAIEmbeddings
 from langchain_openai import AzureOpenAIEmbeddings
+from langchain.chains.llm import LLMChain
+from langchain.prompts import PromptTemplate
+from langchain.chains.combine_documents.stuff import StuffDocumentsChain
+from langchain.chains.mapreduce import MapReduceChain
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.chains import ReduceDocumentsChain, MapReduceDocumentsChain
 
 def GetAllFiles(filesToProcess):
     files = []
@@ -82,28 +88,117 @@ def ComposeResponse(indexNs, indexType, existingSummary, jsonData):
             results["values"].append(outputRecord)
     return json.dumps(results, ensure_ascii=False)
 
-def summarizeTopic(llm, query, promptTemplate, embeddings, embeddingModelType, indexNs, indexType, topK):
+def map_reduce_summary(llm,doc):
+    # Map
+    map_template = """\n\nHuman: The following is a set of documents
+    <documnets>
+    {docs}
+    </documents>
+    Based on this list of docs, please identify the main themes.
+
+    Assistant:  Here are the main themes:"""
+    map_prompt = PromptTemplate.from_template(map_template)
+    map_chain = LLMChain(llm=llm, prompt=map_prompt)
+
+    # Reduce
+    reduce_template = """\n\nHuman: The following is set of summaries:
+    <summaries>
+    {doc_summaries}
+    </summaries>
+    Please take these and distill them into a final, consolidated summary of the main themes in narative format. 
+
+    Assistant:  Here are the main themes:"""
+    reduce_prompt = PromptTemplate.from_template(reduce_template)
+    reduce_chain = LLMChain(llm=llm, prompt=reduce_prompt)
+
+    # Takes a list of documents, combines them into a single string, and passes this to an LLMChain
+    combine_documents_chain = StuffDocumentsChain(
+        llm_chain=reduce_chain, document_variable_name="doc_summaries"
+    )
+
+    # Combines and iteravely reduces the mapped documents
+    reduce_documents_chain = ReduceDocumentsChain(
+        # This is final chain that is called.
+        combine_documents_chain=combine_documents_chain,
+        # If documents exceed context for `StuffDocumentsChain`
+        collapse_documents_chain=combine_documents_chain,
+        # The maximum number of tokens to group documents into.
+        token_max=4000,
+    )
+
+    # Combining documents by mapping a chain over them, then combining results
+    map_reduce_chain = MapReduceDocumentsChain(
+        # Map chain
+        llm_chain=map_chain,
+        # Reduce chain
+        reduce_documents_chain=reduce_documents_chain,
+        # The variable name in the llm_chain to put the documents in
+        document_variable_name="docs",
+        # Return the results of the map steps in the output
+        return_intermediate_steps=False,
+    )
+
+    if type(doc) == str:
+        #use the LangChain built in text splitter to split our text
+        from langchain.text_splitter import RecursiveCharacterTextSplitter
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size = 5000,
+            chunk_overlap  = 200,
+            length_function = len,
+            add_start_index = True,
+        )
+        split_docs = text_splitter.create_documents([doc])
+    return map_reduce_chain.run(split_docs)
+
+#wrapping in a python function to make it easy to use in other scripts.
+def stuff_it_summary(llm, doc):
+    # Define prompt
+    prompt_template = """\n\nHuman:  Consider this text:
+    <text>
+    {text}
+    </text>
+    Please create a concise summary in narative format.
+
+    Assistiant:  Here is the concise summary:"""
+    prompt = PromptTemplate.from_template(prompt_template)
+
+    # Define LLM chain
+    llm_chain = LLMChain(llm=llm, prompt=prompt)
+
+    # Define StuffDocumentsChain
+    stuff_chain = StuffDocumentsChain(llm_chain=llm_chain, document_variable_name="text")
+
+    #Note that although langchain often stores douments in small chunks for the 
+    #convience of models with smaller context windows, this "stuff it" method will
+    #combind all those chunks into a single prompt call.
+
+    if type(doc) == str:
+        docs = [Document(page_content=doc)]
+    return stuff_chain.run(docs)
+
+def summarizeTopic(llm, query, embeddingModelType, indexNs, indexType, topK):
     if indexType == 'cogsearchvs':
-        r = performCogSearch(indexType, embeddingModelType, query, indexNs, topK, returnFields=["id", "content", "sourcefile"] )          
-        if r == None:
-            resultsDoc = [Document(page_content="No results found")]
-        else :
-            resultsDoc = [
-                    Document(page_content=doc['content'], metadata={"id": doc['id'], "source": doc['sourcefile']})
-                    for doc in r
-                    ]
-        logging.info(f"Found {len(resultsDoc)} Cog Search results")
+        try:
+            r = performCogSearch(indexType, embeddingModelType, query, indexNs, topK, returnFields=["id", "content", "metadata"] )          
+            if r == None:
+                resultsDoc = [Document(page_content="No results found")]
+            else :
+                resultsDoc = [
+                        Document(page_content=doc['content'], metadata={"id": doc['id']})
+                        for doc in r
+                        ]
+            logging.info(f"Found {len(resultsDoc)} Cog Search results")
+
+            docContent = ' '.join([doc.page_content for doc in resultsDoc])
     
-    if len(resultsDoc) == 0:
-        return "I don't know"
-    else:
-        customPrompt = PromptTemplate(template=promptTemplate, input_variables=["text"])
-        chainType = "map_reduce"
-        summaryChain = load_summarize_chain(llm, chain_type=chainType, return_intermediate_steps=True, 
-                                            map_prompt=customPrompt, combine_prompt=customPrompt)
-        summary = summaryChain({"input_documents": resultsDoc}, return_only_outputs=True)
-        outputAnswer = summary['output_text']
-        return outputAnswer 
+            if len(docContent) == 0:
+                return "I don't know"
+            else:
+                stuffSummary = stuff_it_summary(llm, docContent)
+                return stuffSummary
+        except Exception as e:
+            logging.info(e)
+            return "I don't know"
 
 def processTopicSummary(llm, fileName, indexNs, indexType, prospectusSummaryIndexName, embeddings, embeddingModelType, selectedTopics, 
                         summaryPromptTemplate, topK, existingSummary):
@@ -139,15 +234,18 @@ def processTopicSummary(llm, fileName, indexNs, indexType, prospectusSummaryInde
             r = findTopicSummaryInIndex(SearchService, SearchKey, prospectusSummaryIndexName, fileName, 'prospectus', topic)
             if r.get_count() == 0:
                 logging.info(f"Summarize on Topic: {topic}")
-                answer = summarizeTopic(llm, topic, summaryPromptTemplate, embeddings, embeddingModelType, indexNs, indexType, topK)
-                if "I don't know" not in answer:
-                    topicSummary.append({
-                        'id' : str(uuid.uuid4()),
-                        'fileName': fileName,
-                        'docType': 'prospectus',
-                        'topic': topic,
-                        'summary': answer
-                })
+                try:
+                    answer = summarizeTopic(llm, topic, embeddingModelType, indexNs, indexType, topK)
+                    if "I don't know" not in answer:
+                        topicSummary.append({
+                            'id' : str(uuid.uuid4()),
+                            'fileName': fileName,
+                            'docType': 'prospectus',
+                            'topic': topic,
+                            'summary': answer
+                    })
+                except:
+                    logging.info(f"Error in summarizing topic: {topic}")                
             else:
                 for s in r:
                     topicSummary.append(

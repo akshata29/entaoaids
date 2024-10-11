@@ -6,14 +6,9 @@ from langchain.text_splitter import NLTKTextSplitter
 import tempfile
 import uuid
 import os
-from pinecone import Pinecone
-from langchain_pinecone import PineconeVectorStore
-from langchain_community.vectorstores.milvus import Milvus
-import pinecone
 from langchain_community.document_loaders.pdf import PDFMinerLoader
 from langchain_community.document_loaders import AzureAIDocumentIntelligenceLoader
 import time
-from langchain_community.vectorstores.redis import Redis
 from langchain_community.document_loaders.web_base import WebBaseLoader
 from langchain_community.document_loaders.word_document import UnstructuredWordDocumentLoader
 from langchain_community.document_loaders.unstructured import UnstructuredFileLoader
@@ -250,12 +245,7 @@ def storeIndex(indexType, docs, fileName, nameSpace, embeddingModelType):
             return
 
         logging.info("Store the index in " + indexType + " and name : " + nameSpace)
-        if indexType == 'pinecone':
-            PineconeVectorStore.from_documents(docs, embeddings, index_name=VsIndexName, namespace=nameSpace)
-            #Pinecone.from_documents(docs, embeddings, index_name=VsIndexName, namespace=nameSpace)
-        elif indexType == "redis":
-            Redis.from_documents(docs, embeddings, redis_url=redisUrl, index_name=nameSpace)
-        elif indexType == "cogsearch" or indexType == "cogsearchvs":
+        if indexType == "cogsearch" or indexType == "cogsearchvs":
             vectorStore: AzureSearch = AzureSearch(
                 azure_search_endpoint=f"https://{SearchService}.search.windows.net/",
                 azure_search_key=SearchKey,
@@ -266,13 +256,6 @@ def storeIndex(indexType, docs, fileName, nameSpace, embeddingModelType):
             vectorStore.add_documents(documents=docs)
             #createSearchIndex(indexType, nameSpace)
             #indexSections(indexType, embeddingModelType, fileName, nameSpace, docs)
-        elif indexType == "chroma":
-            logging.info("Chroma Client: " + str(docs))
-            #Chroma.from_documents(docs, embeddings, collection_name=nameSpace, client=chromaClient, embedding_function=embeddings)
-        elif indexType == 'milvus':
-            milvus = Milvus(connection_args={"host": "127.0.0.1", "port": "19530"},
-                            collection_name=VsIndexName, text_field="text", embedding_function=embeddings)
-            Milvus.from_documents(docs,embeddings)
     except Exception as e:
         logging.error("Exception during storeIndex" + str(e))
         pass
@@ -993,17 +976,6 @@ def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
         )
 
     if body:
-        try:
-            if len(PineconeKey) > 10 and len(PineconeEnv) > 10:
-                # pinecone.init(
-                #     api_key=PineconeKey,  # find at app.pinecone.io
-                #     environment=PineconeEnv  # next to api key in console
-                # )
-                os.environ["PINECONE_API_KEY"] = PineconeKey
-                pc = Pinecone(api_key=PineconeKey)
-        except:
-            logging.error("Pinecone already initialized or not configured.  Ignoring.")
-
         result = ComposeResponse(indexType, loadType, multiple, indexName, existingIndex, existingIndexNs, 
                                  embeddingModelType, textSplitter, chunkSize, chunkOverlap, promptType, deploymentType, body)
         return func.HttpResponse(result, mimetype="application/json")

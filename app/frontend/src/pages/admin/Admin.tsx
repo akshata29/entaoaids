@@ -275,7 +275,7 @@ const Admin = () => {
                   setUploadText("KB Questions Deleted Successfully")
                   setLoading(false)
                   setSelectedIndexType(indexOptions[0])
-                  refreshIndexNs('pinecone')
+                  refreshIndexNs('cogsearchvs')
                 })
               .catch((error : string) => {
                 setUploadText(error)
@@ -500,9 +500,9 @@ const Admin = () => {
 
     useEffect(() => {
       setSelectedIndexType(indexOptions[0])
-      refreshBlob("pinecone")
-      refreshIndexNs("pinecone")
-      refreshSession("pinecone")
+      refreshBlob("cogsearchvs")
+      refreshIndexNs("cogsearchvs")
+      refreshSession("cogsearchvs")
     }, [])
 
     return (
@@ -526,7 +526,7 @@ const Admin = () => {
                       <Dropdown
                           selectedKey={selectedIndexType ? selectedIndexType.key : undefined}
                           onChange={onIndexTypeChange}
-                          defaultSelectedKey="pinecone"
+                          defaultSelectedKey="cogsearchvs"
                           placeholder="Select an Index Type"
                           options={indexOptions}
                           disabled={false}
@@ -581,7 +581,7 @@ const Admin = () => {
                       <Dropdown
                           selectedKey={selectedIndexType ? selectedIndexType.key : undefined}
                           onChange={onKbIndexTypeChange}
-                          defaultSelectedKey="pinecone"
+                          defaultSelectedKey="cogsearchvs"
                           placeholder="Select an Index Type"
                           options={indexOptions}
                           disabled={false}
@@ -633,7 +633,7 @@ const Admin = () => {
                       <Dropdown
                           selectedKey={selectedIndexType ? selectedIndexType.key : undefined}
                           onChange={onSessionIndexChange}
-                          defaultSelectedKey="pinecone"
+                          defaultSelectedKey="cogsearchvs"
                           placeholder="Select an Index Type"
                           options={indexOptions}
                           disabled={false}

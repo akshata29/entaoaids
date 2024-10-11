@@ -51,4 +51,3 @@ bcolors==1.0.4
 azure-ai-documentintelligence==1.0.0b2
 langchain-openai==0.1.1
 langchainhub==0.1.15
-langchain-pinecone==0.0.3

@@ -24,4 +24,3 @@ langchain-experimental==0.0.55
 langchain-community==0.0.29
 langchain-openai==0.1.1
 langchainhub==0.1.15
-langchain-pinecone==0.0.3

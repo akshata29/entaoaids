@@ -418,6 +418,38 @@ def uploadSummaryBinaryFile():
         logging.exception("Exception in /uploadSummaryBinaryFile")
         return jsonify({"error": str(e)}), 500
 
+@app.route("/processDoc", methods=["POST"])
+def processDoc():
+    indexType=request.json["indexType"]
+    indexName=request.json["indexName"]
+    multiple=request.json["multiple"]
+    loadType=request.json["loadType"]
+    existingIndex=request.json["existingIndex"]
+    existingIndexNs=request.json["existingIndexNs"]
+    embeddingModelType=request.json["embeddingModelType"]
+    textSplitter=request.json["textSplitter"]
+    chunkSize=request.json["chunkSize"]
+    chunkOverlap=request.json["chunkOverlap"]
+    promptType=request.json["promptType"]
+    deploymentType=request.json["deploymentType"]
+    postBody=request.json["postBody"]
+   
+    try:
+        headers = {'content-type': 'application/json'}
+        url = os.environ.get("DOCGENERATOR_URL")
+
+        data = postBody
+        params = {'indexType': indexType, "indexName": indexName, "multiple": multiple , "loadType": loadType,
+                  "existingIndex": existingIndex, "existingIndexNs": existingIndexNs, "embeddingModelType": embeddingModelType,
+                  "textSplitter": textSplitter, "chunkSize": chunkSize, "chunkOverlap": chunkOverlap,
+                  "promptType": promptType, "deploymentType": deploymentType}
+        resp = requests.post(url, params=params, data=json.dumps(data), headers=headers)
+        jsonDict = json.loads(resp.text)
+        #return json.dumps(jsonDict)
+        return jsonify(jsonDict)
+    except Exception as e:
+        logging.exception("Exception in /processDoc")
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/processSummary", methods=["POST"])
 def processSummary():

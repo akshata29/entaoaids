@@ -249,7 +249,7 @@ def indexSections(indexType, embeddingModelType, fileName, indexName, docs):
         succeeded = sum([1 for r in results if r.succeeded])
         logging.info(f"\tIndexed {len(results)} sections, {succeeded} succeeded")
 
-def performCogSearch(indexType, embeddingModelType, question, indexName, k, returnFields=["id", "content", "sourcefile"] ):
+def performCogSearch(indexType, embeddingModelType, question, indexName, k, returnFields=["id", "content", "metadata"] ):
     searchClient = SearchClient(endpoint=f"https://{SearchService}.search.windows.net",
         index_name=indexName,
         credential=AzureKeyCredential(SearchKey))
@@ -257,11 +257,10 @@ def performCogSearch(indexType, embeddingModelType, question, indexName, k, retu
         if indexType == "cogsearchvs":
             r = searchClient.search(  
                 search_text=question,
-                vector_queries=[VectorizedQuery(vector=generateEmbeddings(embeddingModelType, question), k_nearest_neighbors=k, fields="contentVector")],  
+                vector_queries=[VectorizedQuery(vector=generateEmbeddings(embeddingModelType, question), k_nearest_neighbors=k, fields="content_vector")],  
                 select=returnFields,
                 query_type="semantic", 
-                query_language="en-us", 
-                semantic_configuration_name='semanticConfig', 
+                semantic_configuration_name='mySemanticConfig', 
                 query_caption="extractive", 
                 query_answer="extractive",
                 include_total_count=True,
@@ -273,9 +272,8 @@ def performCogSearch(indexType, embeddingModelType, question, indexName, k, retu
                 r = searchClient.search(question, 
                                     filter=None,
                                     query_type=QueryType.SEMANTIC, 
-                                    query_language="en-us", 
                                     query_speller="lexicon", 
-                                    semantic_configuration_name="semanticConfig", 
+                                    semantic_configuration_name="mySemanticConfig", 
                                     top=k, 
                                     query_caption="extractive|highlight-false")
             except Exception as e:

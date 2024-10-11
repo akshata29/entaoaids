@@ -825,7 +825,7 @@ const Upload = () => {
                   <Dropdown
                       selectedKey={selectedItem ? selectedItem.key : undefined}
                       onChange={onChange}
-                      defaultSelectedKey="pinecone"
+                      defaultSelectedKey="cogsearchvs"
                       placeholder="Select an Vector Database"
                       options={options}
                       disabled={false}

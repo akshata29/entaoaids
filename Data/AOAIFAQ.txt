@@ -1,0 +1,644 @@
+Azure OpenAI Service – Customer Conversation Guidance & FAQ
+Latest update: 23 May 2023. 
+Updated to include details about AOAI product announcements at Build 2023
+BUILD 2023 ANNOUNCEMENTS
+FAQ: PROVISIONED THROUGHPUT
+What is the provisioned throughput feature in Azure OpenAI?
+What are Provisioned Throughput Units (PTUs)?
+How do I size a provisioned throughput deployment?
+What are the benefits of the provisioned throughput feature?
+When would I choose provisioned throughput?
+How do I sign up for provisioned throughput?
+Once I’ve been onboarded, how will I create my provisioned throughput deployments?
+What happens if a customer needs to scale up a deployment?
+How do customers handle spikes in workload?
+How do customers choose the Azure OpenAI model for which they are purchasing PTUs?
+How can customers manage commitment tiers once purchased?
+Is provisioned deployment an option for fine-tuned models?
+Is my provisioned traffic running on dedicated hardware?
+How much does the provisioned throughput offering cost?
+Does provisioned throughput offer increased isolation and security benefits vs. the PAYGO model?
+What is the uptime SLA for Provisioned throughput?
+Key Terminology for Provisioned Throughput
+AZURE OPENAI SERVICE ON YOUR DATA
+What was announced at BUILD?
+When is it available?
+Why are customers excited about this?
+How does this feature enable faster and more accurate communication, improved customer service, and increased productivity across the organization?
+Is this feature customizable to meet the needs of individual organizations?
+PLUGINS
+What are plugins in Azure OpenAI Service?
+What plugins are included in the limited preview?
+Can I create my plugins?
+How can I build a plugin and sell it to other Azure customers?
+What’s the difference between plugins and using your own data?
+Can I use the same plugins available in OpenAI on Azure?
+How do I get started with using plugins in Azure OpenAI Service?
+AZURE OPENAI SERVICE QUOTA
+What is Azure OpenAI Quota?
+What are the customer benefits of Quota?
+Why is Azure OpenAI making this change?
+How does Azure OpenAI Quota work?
+Does quota change the billing model?  Am I paying for quota?
+Will new users get default quota?
+Will existing users get default quota?
+Is deployment quota shared across models types?
+FIELD GUIDANCE BRIEFING FOR CUSTOMER CONVERSATIONS
+Relationship with OpenAI
+ChatGPT in OpenAI
+ChatGPT in Azure OpenAI Service
+Customer Data Governance - 1st party offerings that integrate Azure OpenAI capabilities (such as Microsoft 365 copilot and Dynamics 365 copilot)
+Customer Data Governance for Azure OpenAI Service
+Azure OpenAI Compliance
+Azure OpenAI Service Input Ownership
+Azure OpenAI Service Output Ownership
+Liability in connection with Azure OpenAI Output Content
+Responsible AI (RAI)
+AI Regulatory landscape
+Enterprise Risk Management and Foundational Models
+Key Resources
+FAQ: BACKGROUND ON MICROSOFT AND OPENAI
+What is OpenAI?
+What is the Microsoft and OpenAI relationship?
+What are GPT, Codex, DALL-E, and ChatGPT?
+How does this connect into the strategy with Microsoft’s own AI models such as Turing and Megatron?
+FAQ: AZURE OPENAI SERVICE
+What is the current competitive landscape of generative AI?
+What is Azure OpenAI Service?
+How is Azure OpenAI Service different from OpenAI?
+When did the service GA?
+Why is the service limited access? How does limited access work?
+What is the pricing for Azure OpenAI Service?
+Are the models on Azure OpenAI open source?
+Does Azure OpenAI Service include ChatGPT?
+How does the Azure OpenAI Service ChatGPT model differ from the OpenAI ChatGPT model?
+How much will ChatGPT cost?
+Can I get a ChatGPT demo from Microsoft?
+How do I implement ChatGPT and how can I get started?
+What is GPT-4?
+How is GPT-4 different from GPT-3 or ChatGPT?
+How should I position GPT-4 with customers?
+When should I use GPT-4 vs other OpenAI models? Use cases?
+Can I use the Text Completions API with GPT-4?
+Which regions is GPT-4 available in for AOAI Service?
+Will images be available with GPT-4 in Azure OpenAI Service?
+Will GPT-4 be available to all customers who have access to AOAI Service?
+How will GPT-4 be priced?
+How effective is using Azure OpenAI Service in intelligence scenarios?
+Where do I go to find out if a product or functionality is in preview or generally available?
+FAQ: IP, DATA USAGE, DATA PRIVACY, DATA OWNERSHIP, AND RESPONSIBLE AI
+Customer legal wants to know what legal terms apply to the Azure OpenAI Service.
+Does Microsoft use customer data to train or improve the models?
+What Responsible AI capabilities and safety systems can I use with my models?
+Does ChatGPT have filtering? And is there any difference in filtering between ChatGPT for OpenAI and ChatGPT from Azure OpenAI Service?
+Does Microsoft claim ownership of the output generated from the Azure OpenAI service?
+Who is responsible for third-party claims regarding use of Azure OpenAI Service in compliance with applicable laws?
+Can all models in Azure OpenAI be custom-tuned?
+Can a customer build their own customized LLM like ChatGPT using their own data?
+Are there any new or updated Responsible AI considerations?
+May customers apply to modify/discontinue (i) content filtering, (ii) abuse monitoring, or both items (i) and (ii)? May a customer request to keep in place (i) content filtering but discontinue (ii) abuse monitor? Yes. Customers may use this form to apply to modify either or both of these aspects of the content safety system (see Q23). Once approved (based on Microsoft eligibility and use case criteria), the customer works with the product team to get the appropriate modifications in place.
+Does Microsoft monitor the use of Azure OpenAI Service?
+Is it okay for customers to share confidential information with the models, including ChatGPT, available on Azure OpenAI Service?
+Can 3P customers request to use output data from Azure OpenAI models to train their own open-source models?
+What does Azure do with these kinds of requests?
+Does Microsoft have a duty to defend related to the customer for the use of AI products and services?
+Is a GPT application calling from China and being processed in the US and returning data to China legally compliant in light of the American export controls to China?
+Is there a Data Protection Impact Assessment (DPIA) for Azure OpenAI Service?
+FAQ: INTERNAL QUESTIONS
+Does Azure OpenAI Service retire my quota?
+Should I be selling Azure OpenAI Service actively in my accounts?
+There is a lot of hype around Azure OpenAI Service and my customer(s) are very interested. What do I do?
+If my customer or partner’s access is approved, what is next?
+What is a good set of steps to follow for exploring the models?
+Can I get access to Azure Open AI Service?
+If the customized Enterprise Agreement or Online Services Terms conflict with the Azure Cognitive Services terms what terms govern?
+Are there limits on solution building work with Healthcare customers?
+Where can I find more information?
+Who do I contact if I need more information about Azure OpenAI Service?
+Can all partners request access for a customer?
+Can ISVs build apps using Azure OpenAI Service?
+How does the Azure OpenAI Service ChatGPT model differ from the model Bing uses?
+If a customer wants to use AOAI for use cases they did not initially disclose, do they need to come to us for approval?
+Do we monitor/check if customers are using the services for the approved use cases? How?
+
+
+
+
+BUILD 2023 Announcements 
+FAQ: Provisioned Throughput
+
+What is the provisioned throughput feature in Azure OpenAI? 
+Provisioned throughput is a new Azure OpenAI Service feature that lets customers reserve and deploy Azure OpenAI model processing capacity for running their high-volume workloads. Customers can purchase Provisioned Throughput Units (PTUs) on a monthly or yearly basis and can use them to deploy GPT-35-Turbo or GPT-4 models with reserved processing capacity during the commitment period. With reserved processing capacity, customers can expect consistent latency and throughput for workloads with consistent characteristics such as prompt size, completion size, and number of concurrent API requests.  
+ 
+What are Provisioned Throughput Units (PTUs)?  
+Provisioned Throughput Units are units of model processing capacity that customers can reserve and deploy for processing prompts and generating completions. The minimum PTU requirements and processing capacity associated with each unit varies by model type.  
+ 
+Model 
+Minimum PTUs per deployment 
+PTU  increments beyond the minimum 
+Commitment tier options 
+GPT-3.5 Turbo 
+300 
+100 
+1 month or 1 year 
+GPT-4 8k 
+900 
+300 
+1 month or 1 year 
+GPT-4 32k 
+1800 
+600 
+1 month or 1 year 
+ 
+How do I size a provisioned throughput deployment? 
+The throughput you need for a single model instance can be difficult to predict as it depends on scenario-specific factors, including your prompt length, average and maximum completion lengths, and concurrent requests. The recommended approaches to estimate PTU needs are as follows: 
+a. Compare with Benchmarks (for a rough sizing) 
+The benchmarks in the table below represent achieved rates of tokens-per-second and requests-per-second by our engineering teams for various input and output sizes using the minimum increment of PTUs for each model. By comparing the characteristics of the target scenario with these benchmarks, customers can roughly estimate the number of PTUs that will be required to support their scenario.  
+ 
+There are multiple scenario-specific factors that will influence the throughput and latency that a customer will obtain in practice from a provisioned deployment, including the distribution of prompt and completion token lengths and the rate and number of simultaneous requests sent to the model.  Additionally, stress test results may not precisely replicate the benchmark results due to variations in testing methodology.  For these reasons the benchmark results should not be the sole factor used for final deployment sizing or budgeting 
+ 
+ 
+b. Validate with a stress test (for more accurate sizing information) 
+The best way to size a deployment is to empirically stress test a provisioned deployment using data from the target scenario. Azure OpenAI recommends that customers acquire provisioned throughput deployment on a 1-month commitment tier, then perform a load test to decide how much of their traffic an instance can support while meeting their latency and throughput needs. The result of this experiment will be a more accurate understanding of throughput characteristics to determine how many PTUs to purchase for future commitment periods. 
+ 
+GPT-35-Turbo Benchmarks – Achieved Results per 100 Units 
+ 
+ 
+GPT-4-8K Benchmarks – Achieved Results per 300 Units 
+ 
+ 
+GPT-4-32K Benchmarks 
+If the customer is interested in sizing for GPT-4-32K, please reach out to the Azure OpenAI CxE team (engageaoai@microsoft.com) for assistance 
+ 
+What are the benefits of the provisioned throughput feature?  
+For some customers, the provisioned throughput feature provides several benefits in comparison to consumption-based (pay-as-you-go) deployment: 
+* Cost savings for consistent, high-volume workloads 
+* Reserved processing capacity that is available when customers need it 
+* Consistent performance (e.g., latency) for workloads with consistent characteristics 
+* Flexible commitment periods (1-month or 1-year) and predictable budgeting 
+ 
+When would I choose provisioned throughput?  
+Provisioned throughput could be a good option for customers that have the following characteristics: 
+1. Consistent, high-volume workloads: Customers with consistently high throughput are likely to see cost savings compared to token-based consumption pricing. 
+ 
+2. Need to lock-in capacity for production rollouts: Customers planning production rollouts who want to reserve processing capacity now so that it is available when needed.  
+ 
+3. Consistent throughput and latency: Customers with latency-sensitive scenarios can expect predictable performance for workloads of consistent prompt/completion sizes and concurrent API requests. 
+ 
+How do I sign up for provisioned throughput? 
+The provisioned throughput feature is available, on a limited basis, to customers who are looking to secure a long-term commitment (on a monthly or yearly basis) for their high-volume Azure OpenAI workload. The provisioned throughput SKUs are in Lead Status. Please contact your Microsoft account team to help you size your workload and assess if this is the right option for you. 
+ 
+Once I’ve been onboarded, how will I create my provisioned throughput deployments? 
+Provisioned throughput deployments are a different deployment type within Azure OpenAI (the other being a Standard deployment with pay-as-you-go/consumption pricing).  Customers need to follow three steps to create their provisioned throughput deployments: 
+1. Request quota  
+Before creating a provisioned throughput deployment, the customer needs to reserve the capacity for the models and regions they require. They will do this by requesting quota for “Provisioned Throughput Units” (PTUs), which will be used to assign model processing capacity to each provisioned deployment. Quota may be requested from the Usages+Quota tab of Azure AI Studio after the subscription has been onboarded. 
+ 
+2. Purchase a commitment tier on each resource that will contain a provisioned throughput deployment 
+Approved quota reserves processing capacity, but the quota must be purchased via commitment tier before it can be used to create a deployment. Because Azure OpenAI is holding capacity for the customer starting from the time the quota is approved, the customer must complete the commitment tier purchase within 48 hours or the quota may be taken back. 
+ 
+Commitment tiers are associated with Azure OpenAI resources and are available for Monthly and Annual periods. Customers will purchase a commitment tier by navigating to the quota page within Azure AI Studio and selecting the PTUs to commit to on a specific Azure OpenAI resource. Once the commitment tier is purchased, the customer will be billed up-front based on the commitment period and number of PTUs. The PTUs will then be available for use in creating deployments. 
+ 
+3. Create provisioned throughput deployments 
+The customer will create provisioned throughput deployments within resources that have committed PTU quota in the same manner as Standard, pay-as-you-go deployments. In addition to specifying the deployment name and model type, the customer will also specify the PTUs, up to the amount of available quota, to assign to the deployment. This will control the processing capacity reserved for the deployment.  
+ 
+What happens if a customer needs to scale up a deployment? 
+If a deployment has insufficient processing capacity for the required load, it can be scaled-up by assigning additional available PTUs to the deployment. It can also be scaled down, which will result in PTUs being freed for use in another deployment (for example, if there is a need to create a second provisioned deployment of the same model within a resource). 
+If there is insufficient Available Quota to support the required increase, the customer may request additional quota. Once approved, this quota can be used to purchase a new commitment tier or it can be purchased and added to an existing commitment tier. If added to an existing tier, it will be billed immediately, pro-rated to the end of the current commitment period. The PTUs will then be available to assign to deployments.  
+How do customers handle spikes in workload? 
+If committed PTUs are available or can be freed by reducing the number of PTUs assigned to other deployments, customers can increase the PTUs assigned to a deployment to cover expected traffic peaks, per question #8 above. 
+ 
+If a more agile approach is desired, customers can pair a provisioned throughput deployment with a standard, usage-based deployment of the same model.  Then, in the event of a traffic spike beyond the capability of the provisioned throughput deployment, the customer can route the excess traffic to the standard deployment. This excess traffic would be billed based on Tokens consumed, on a pay-as-you-go/consumption basis. 
+How do customers choose the Azure OpenAI model for which they are purchasing PTUs?  
+In the initial release of provisioned throughput, the following models are available: 
+* GPT-35-Turbo 
+* GPT-4-8k 
+* GPT-4-32K 
+Customers specify the model they plan to deploy when they request PTU quota. The quota they receive is specific to a model and region. For example, a customer that wants to deploy GPT-35-Turbo in East US and West Europe will need to obtain quota for that model in each region, separately. Likewise, if they want to deploy GPT-35-Turbo and GPT-4 both in East US, they will need to obtain quota for each model, separately. 
+How can customers manage commitment tiers once purchased? 
+A customer cannot decrease the number of PTUs in a commitment during the commitment period. However, they can add PTUs to a commitment, which will be billed on a pro-rated basis from that point to the end of the commitment period. 
+Customers can also specify what happens when a commitment expires. The options are  
+Auto-renew: The commitment will automatically be renewed at the end of the commitment period for the same commitment period and number of PTUs. 
+ 
+Transition to hourly billing: At the end of the commitment period, any provisioned deployments will convert to hourly billing at the hourly provisioned rate of $2/hour/unit; the hourly rate is incurred for every hour that a unit of provisioned throughput capacity is deployed. 
+ 
+ Is provisioned deployment an option for fine-tuned models? 
+Not at this time. 
+ 
+ Is my provisioned traffic running on dedicated hardware? 
+PTUs correspond to reserved processing capacity, but not necessarily isolation of processing at the hardware level. For example: The PTUs for a single model instance can be fulfilled with a single instance dedicated to the deployment, or across multiple instances providing equivalent processing capacity. 
+ 
+ 
+ How much does the provisioned throughput offering cost? 
+ 
+Commitment 
+Price per PTU 
+Monthly 
+$260 
+Yearly 
+$2,640 
+ 
+Model 
+PTUs/Instance 
+Minimum PTUs per Deployment  
+GPT3.5-turbo 
+100 
+300 
+GPT4-8K 
+300 
+900 
+GPT4-32K 
+600 
+1,800 
+ 
+Example for billing –  
+A commitment that can support three instances of GPT-35-turbo and three instances of GPT-4-8K requires (100 units * 3 instances) + (300 units * 3 instance) for a total of 1,200 units. The monthly price would then be 1,200 * $260 = $312,000 per month. 
+ 
+Customers that keep their provisioned throughput deployed after their commitment period expires will be billed at the rate of $2/hour/unit.  The hourly rate is incurred for every hour that a unit of provisioned throughput capacity is deployed. 
+For example: The customer purchases a monthly commitment tier with auto-renewal disabled.  At the end of the commitment period, the customer still has 300 units of GPT-35-Turbo deployed.  In this case, the customer will be charged $2/hr/unit = $600/hr = $14,400/day until the deployment is deleted, or the user begins a new commitment to cover the 300 deployed units. 
+Does provisioned throughput offer increased isolation and security benefits vs. the PAYGO model? 
+ 
+Azure OpenAI Service is a Microsoft service protected by the most comprehensive enterprise compliance and security controls in the industry, and this applies to all Azure OpenAI deployments. Provisioned throughput deployments do not have different security features, they have access to reserved processing capacity. 
+ 
+What is the uptime SLA for Provisioned throughput? 
+ 
+What is the uptime SLA for Provisioned throughput? The uptime SLA for provisioned throughput deployments is 99.9% -- the same as for Standard Azure OpenAI deployments. Provisioned throughput provides access to reserved processing capacity, which means that customers can expect consistent latency and throughput for workloads with consistent characteristics such as prompt size, completion size, and number of concurrent API requests 
+ 
+ 
+Key Terminology for Provisioned Throughput 
+Term 
+Definition 
+Provisioned Throughput Unit (PTU) 
+Provisioned Throughput Units are units of model processing capacity that customers you can reserve and deploy for processing prompts and generating completions. The minimum PTU increments, and processing capacity associated with each unit varies by model type. 
+Provisioned Throughput Unit (PTU) Quota 
+The type of quota that customers need to acquire to purchase provisioned throughput units.  Approved quota must be committed (purchased) within 48 hours after _____ or it may be taken back. 
+Uncommitted Quota 
+PTU quota that has been acquired but not yet committed 
+Committed Quota 
+PTU quota that has been committed via a resource-level commitment tier purchase 
+Available Quota 
+Committed quota that has not yet been used to create a provisioned deployment 
+Commitment Tier 
+A customer’s advance purchase of a specified number of PTUs (which correspond to reserved model processing capacity) for a defined duration, either 1 month or 1 year 
+Model Processing Capacity/Processing Capacity 
+The compute backing a provisioned throughput deployment according to the number of PTUs assigned to it. This sets the maximum throughput of the deployment, though the absolute throughput may vary based on scenario characteristics. 
+ 
+Azure OpenAI Service on your data
+What was announced at BUILD?
+We announced the ability to ground powerful AI models, such as ChatGPT and GPT-4, on your data. With AOAI on your data, you can leverage these powerful models across your organization.
+When is it available?
+AOAI on your data is currently in private preview, with public preview beginning June 5, 2023.
+
+Why are customers excited about this? 
+Users are excited about Azure OpenAI Service on your data because it provides a chat interaction that allows them to iterate through questions for answers on their organizational data. Enterprise users want to use OpenAI models and ChatGPT on their enterprise data, as opposed to public internet data. They want an OpenAI grounded to their data that complies with their business policies and access rights. They don't want to compromise enterprise-level security, data policies, document ranking, and more. 
+How does this feature enable faster and more accurate communication, improved customer service, and increased productivity across the organization? 
+Azure OpenAI Service on your data enables faster and more accurate communication by providing a powerful conversational AI platform that unlocks the full potential of your data. It allows you to connect your data source, wherever it is, and unlock the full potential of your data with ground, chunk, tune, and tone. It's easy to integrate with simple API and SDK and a customizable sample app, making it easy to quickly share within your organization or with your customers.
+Is this feature customizable to meet the needs of individual organizations? 
+Yes, Azure OpenAI Service on your own data is customizable to meet the needs of individual organizations. It provides a direct answer to the question asked based on the company's data and plans.
+Plugins
+What are plugins in Azure OpenAI Service? 
+Plugins are a standardized interface that allows developers to build and consume APIs that extend the capabilities of large language models (LLMs) and enable a deep integration of GPT-4 across Azure and the rest of the Microsoft ecosystem of products. 
+What plugins are included in the limited preview?
+The following plugins are included in the limited preview:
+* Bing Search
+* Azure Cognitive Search
+* Azure SQL
+* Azure Cosmos DB
+* Microsoft Translator
+Can I create my plugins? 
+Yes, customers will soon be able to create their plugins, although right now, only prebuilt plugins are available.
+How can I build a plugin and sell it to other Azure customers? 
+Not yet. We’re considering this for future releases.
+What’s the difference between plugins and using your own data? 
+Project Wednesday uses the same plugin interface to make calls to its data sources, however, Project Wednesday does more than a typical plugin. It has support for additional functionality like citations and does additional processing to improve quality. Project Wednesday is also an experience on top of AOAI that provides functionality like making it easy to index data or deploy a web app.
+Can I use the same plugins available in OpenAI on Azure? 
+Plugins will be interoperable between OpenAI and Azure OpenAI. However, some of the plugins provided by OpenAI require authentication to be set up with the plugin provider, so you would need to work with the plugin provider to gain full access to the plugin.
+How do I get started with using plugins in Azure OpenAI Service?
+Customers can get started by selecting the plugin, configuring it, attaching it to a deployment, and beginning to use it in the studio.
+
+Azure OpenAI Service Quota
+
+What is Azure OpenAI Quota?
+Starting June 1st, 2023, Azure OpenAI will increase transparency and customer control over deployment capacity and resource count limits via the familiar Azure quota framework.  
+Today, the throughput of Azure OpenAI model deployments is governed by rate limits that are invisible to the customer.  Customers can request higher limits when necessary but must repeat this on a per-deployment basis and customers can’t share them with new deployments.  The Azure OpenAI portal and Studio experiences also don’t provide any information on the limits set for each deployment, forcing customers to contact Azure Support to verify them when required.  These limitations are a significant operational challenge for enterprises managing Azure OpenAI access across many projects or teams.
+Azure Quota will solve these problems through the familiar application of explicitly managed quota for model capacity and other important limits, such as the number of resources per region.  For example, customers will obtain quota at the subscription level to cover the throughput they need for each model type, and then allocate that quota to deployments based on their unique requirements.  The amount of quota approved and used will be visible in Azure OpenAI Studio, and the quota applied deployments can be moved to new deployments at any time to meet changing operational requirements. 
+Azure Quota will be applied to:
+* The sizing of Standard and Provisioned deployments
+* The maximum resources per subscription
+What are the customer benefits of Quota?
+Azure OpenAI Quota provides customers with the following benefits:
+* Granular, self-service control over allocation of throughput across scenarios.
+Many enterprises create multiple resources and model deployments to meet operational needs, such as separating development, integration and production environments, separating traffic by scenario, or managing access centrally across many teams.  Quota wil allow these enterprises to centrally obtain model throughput, and then allocate it across deployments as needed.
+
+For example, if a customer has standard gpt-35-turbo quota for 600 RPM and 300K TPM, they can decide to allocate all of that to a single standard deployment or can spread it out as necessary across multiple deployments; even across resources.  As needs change, the allocation can be updated by the customer at any time 
+
+* Elimination of restrictive limits on deployments and resources per region
+Because allocation of deployment throughput will be managed globally within the subscription, Azure OpenAI will support multiple deployments of the same model within a resource, and significantly increase the maximum number of resources per subscription.
+
+* Ability to create larger deployments with default rate limits
+The default quota assigned to new users will support the creation of deployments with throughput higher than what’s possible with today’s default RPM and TPM limits.
+
+* Transparent RPM and TPM throttling limits per deployment
+
+
+Why is Azure OpenAI making this change?
+The introduction of a quota system is a response to customer demand for a capacity and limit management system that is transparent and that provides greater control for customers to meet their operational needs.
+
+How does Azure OpenAI Quota work?
+* There are different types of Azure OpenAI Quota:
+o Standard Throughput Units (STUs): Quota that provides access to throughput capcity for standard, usage-based deployments.  This quota type is regionally .allocated on a per-model-type basis.  For example, a customer may have different amounts of quota in East US and West Europe for the same model, based on their requirements and Azure OpenAI model capacity available.  When quota is enabled, each Azure OpenAI-enabled subscription will have quota assigned to it by default for all modesl (see FAQ questions below for details)
+o Provisioned Throughput Units (PTUs): Quota that provides access to processing capacity for provisioned, commitment-based deployments.  Customers that are enabled for provisioned deployments (it’s a limited-access, gated capabiliy) will start with no PTU quota, and must explicitly request it.
+o Maximum Resources per Region: Quota provides access to create a number of resources per region.  Today, the limit is 3 per region.  This will be increasing to a default of 30 per region with a quota, and users can request increases to the resource-count quota in regions where they need it.
+
+* For both Standard and Provisioned deployments, subscription quota is used to size deployments within the subscription. The STUs or PTUs assigned to a deployment define the Azure Open
+o Standard Deployment Units: Each STU corresponds to a rate-limit of 10,000 TPM, 120 RPM.  For example, a GPT-35-Turbo deployment sized at 10 STUs will have a maximum
+throughput of 100,000 TPM and 1,200 RPM.  The mapping of STU to TPM/RPM limits is the same for every model type.
+o Provisioned Deployment Units: Each PTU corresponds to a set amount of model processing capacity.  This will let customers achieve a maximum throughput dependent upon the model and the scenario.  See the FAQ sections on Provisioned deployments for more information
+
+The quota assigned to a subscription is referred to as “approved” quota.  Users can assign STUs and PTUs to deployments up to the total amount of approved quota.  Attempting to create a deployment that would extend the used STUs/PTUs beyond the approved quota will fail.  For example, a customer can use 10 approved STUs of text-davinci-003 in East US across a single 10-unit deployment, or a combination of smaller deployments whose units add up to 10.  These deployments can be created in any resources within the subscription.
+
+If a customer doesn’t have enough units to create a deployment, they have two options:
+1. The customer can reduce the units assigned to an existing deployment to free available units for the new deployment.  Fo example, if one team has a large deployment with low utilization, it can be downsized and some of its units applied to the deployment of another team that needs them.
+1. The customer can request an additional quota.  The user will request an additional quota using a process similar the rate-limit increase process used today.  Azure OpenAI will be onboarding to the familiar Azure tools for managing quota for other Azure services, such as Azure Compute.  This system may be available at launch, or closely following.
+
+* Max Resources per Region quota limits the number of resources that can be created per region.  While the defaultl limit will be raised substantially with quota, customers can request additional quota if they need 
+Does quota change the billing model?  Am I paying for quota?
+No.  For standard deployments with usage-based pricing, quota only provides a new mechanism to help customers manage overall throughput requirements and allocation to deployments.  It does not change the per-1K-token billing model in any way.
+For provisioned deployments, an approved quota must be purchased with a commitment plan before it can be used to create deployments.  See the FAQ section on the Provisioned offering for more details.
+
+Will new users get default quota?
+Yes.  Subscriptions newly onboarded to Azure OpenAI will receive default quota that allows them to experiment with all generally available models.  Gated models such as GPT-4 will continue to be gated, and default quota will be available to the customer once they have been given access to the model.
+For most models, the quota assigned will give them access to 2x the default RPM/TPM available on the service today.  This means that customers can create deployments of 2x today’s default rate limits right from the start, without requesting a rate limit increase.
+Will existing users get default quota? 
+Yes, subscriptions onboarded to Azure OpenAI prior to the quota system will receive quota for each model type equal to the maximum of the new-use default, or to their rate-limit increases approved on their subscriptions.
+Is deployment quota shared across models types?
+Deployment quota is assigned on a region/model type basis.  For example, quota can be shared across ada-embedding-text-002 v1 and v2, but not across text-davinci-002 and text-davinci-003.
+Field Guidance Briefing for Customer Conversations 
+
+Azure OpenAI Service is an extraordinary tool for a particular set of use cases associated with content generation – whether text, code, or images. However, a large majority of customers and use cases will still benefit from the breadth of capabilities available within our Azure AI and Cognitive Services portfolio.
+Sellers and partners are highly encouraged to lead by focusing on understanding why customers are interested in AI and the use cases they are looking to enable. We believe the broader Azure Cognitive Services portfolio will be useful in addressing a vast majority of use cases in your accounts. 
+Because the Azure OpenAI Service is designated as a Limited Access Service under Azure Cognitive Services Product Terms, customers interested in using Azure OpenAI Service must complete a registration form, for the internal teams to approve and onboard. For customers interested in using Azure OpenAI Service, please direct them to this form to register for approval to access and use Azure OpenAI Service. All use cases must be registered.  As part of Microsoft's commitment to responsible AI, we are designing and releasing Azure OpenAI Service with the intention of protecting the rights of individuals and society and fostering transparent human-computer interaction. For this reason, we currently limit the access and use of Azure OpenAI, including limiting access to the ability to modify content filters and/or abuse monitoring. Any customers who want to modify content filters and/or abuse monitoring will need to submit an additional application form.  
+Relationship with OpenAI
+
+On January 23, 2023, Microsoft announced the next phase of our relationship with OpenAI. Microsoft will continue to invest in, innovate on, and build an advanced AI computing infrastructure used for the research, development, and commercialization of OpenAI’s AI models. The relationship also continues to enable Microsoft and OpenAI to each commercialize the resulting AI technology and innovations. OpenAI can independently commercialize their models both in 1st party products and with 3rd party customers, and Azure remains the exclusive cloud provider for OpenAI workloads.  
+* The following are guidelines on what is appropriate and what to avoid in discussing our relationship with OpenAI:
+o Highlight the technology that OpenAI has developed and our collaborative work together on R&D.
+o We want to enable customer choice. If there are specific scenarios where a customer believes OpenAI APIs suit them better, or if they just want to experiment with it, it’s fine to direct them to OpenAI.  
+o Promote the advantages of our offerings, e.g., enterprise-grade security, compliance, and the Responsible AI framework.
+o Avoid making disparaging statements about OpenAI’s offerings. It’s fine to explain differences highlighting the advantages of Microsoft’s offerings.
+o If a customer is interested in a joint discussion with OpenAI and Microsoft, it is fine to do so, provided that customer affirmatively requests it at their discretion and we document the request.  
+o In no event may OpenAI and Microsoft agree not to compete for a customer or group of customers.  Avoid any discussions related to allocation of customers or territories.
+ChatGPT in OpenAI
+* ChatGPT from OpenAI is a user experience (a chat agent hosted at https://chat.openai.com/) plus an underlying model.
+* That underlying model powers both the ChatGPT UI in OpenAI’s portal, and also the API they offer.
+* When ChatGPT first launched, there was a specific model version (a RLHF-fine-tuned version of GPT 3.5 at the time) that powered it; so the model and the UI shared a name and a purpose.
+ChatGPT in Azure OpenAI Service 
+* Azure OpenAI does not have a public-facing ChatGPT UI. It provides the API.
+* Customers access ChatGPT through the Azure OpenAI Service (https://oai.azure.com) and the experience is targeted toward app builders.
+* Customers navigate to the Azure OpenAI Studio landing page and then select ChatGPT playground.
+* This documentation provides an overview and screen shots of the experience.
+Customer Data Governance - 1st party offerings that integrate Azure OpenAI capabilities (such as Microsoft 365 copilot and Dynamics 365 copilot)
+* For our first party enterprise offerings that integrate Azure OpenAI capabilities, many of them are in preview.  As such, they are currently intended to be used for customer evaluation purposes and not subject to our standard agreements for General Availability (GA).  
+* Microsoft’s current approach during preview is: 
+o Microsoft does not use customer data to train or improve our large language models.  
+o We believe the customers’ data is their data.	
+o   
+* As we approach GA, Microsoft will continue to abide by our core principles that customers own their customer data and Microsoft will use customer data only to provide the services we have agreed upon and for purposes that are compatible with providing those services.  We will continue to learn and adjust our approach to align to the AI technology as it evolves and will share more information as we get closer to GA.  
+Customer Data Governance for Azure OpenAI Service 
+* Azure OpenAI Service is an Azure service and OpenAI does not have access to any Microsoft customer data or custom-tuned models. Microsoft has licensed the rights to make the OpenAI models available through the Azure OpenAI Service, and Microsoft hosts the OpenAI models within our Azure infrastructure. No customer data processed by the Azure OpenAI Service is used to improve the models by either Microsoft or OpenAI. Customer custom-tuned models are stored and managed in the customer’s instance of the Azure OpenAI service in their Azure subscription and are only accessible to the customer.
+* By default, the prompts and completions in the Azure OpenAI service are logged as part of the content management system and retained for up to 30 days. (Details about content filtering in Azure OpenAI are available at Azure OpenAI Service content filtering.) This data may be accessed by Microsoft personnel for debugging or if a prompt or response triggers a filter or abuse alert. The filters may be updated to improve the quality of filters, but customer data is not used to improve the models themselves (effective April 1). Eligible customers with specific approved usage scenarios may apply for approval to configure content filtering and/or abuse monitoring off. If abuse monitoring is configured off, prompts & completions are not logged or stored.
+* Information about how the Azure OpenAI Service processes data is here: Data, privacy, and security for Azure OpenAI Service - Azure Cognitive Services | Microsoft Learn
+Azure OpenAI Compliance
+* Although powered by models built by OpenAI, Azure OpenAI is a Microsoft Azure service protected by the most comprehensive enterprise compliance and security controls in the industry. The service is subject to Microsoft's Data Protection Addendum and service terms. Detailed information about how Azure OpenAI processes data, including our commitment that data processed by the service is not used to train the foundational AI models, is available at data, privacy, and security.
+* To help customers meet their own compliance obligations, Azure OpenAI Service maintains compliance offerings as described in Microsoft Azure Compliance Offerings.
+Azure OpenAI Service Input Ownership
+* Customer prompts submitted to the Azure OpenAI Service meet the definition of “Customer Data” in Microsoft's Data Protection Addendum, and the DPA provides that “As between the parties, Customer retains all right, title and interest in and to Customer Data and Professional Services Data. Microsoft acquires no rights in Customer Data or Professional Services Data, other than the rights Customer grants to Microsoft in this section.” 
+
+Azure OpenAI Service Output Ownership 
+* Azure OpenAI Service is an Azure service that allows our customers to build experiences that leverage the power of AI to empower users to be more productive and creative. Microsoft does not claim ownership of the output of the service. 
+* As copyright and other laws relating to ownership vary by jurisdiction, Microsoft does not make a determination on whether a customer’s output is copyright-protected. 
+Liability in connection with Azure OpenAI Output Content
+* As with any assistive capability, customers are ultimately responsible for verifying information, and using or sharing output generated in an appropriate and legally compliant way.
+* Because the customer is responsible for verifying information, and using or sharing the output generated by the Azure OpenAI Service, customer is responsible for responding to any third-party claims regarding customers use of the Azure OpenAI Service in compliance with applicable laws (including, but not limited to, copyright infringement or other claims relating to the data or content output by the Azure OpenAI Service during Customer’s use of the service).  
+* Customers must assess the risks associated with their specific usage of the Azure OpenAI Service and may implement protections and controls in their applications to address specific risks.
+Responsible AI (RAI)
+* While the potential of AI is significant, there are concerns that AI may undermine information integrity, exacerbate bias and inequality, and harm jobs, education, and the environment.
+* As a company developing and deploying this technology, Microsoft is committed to working with others to enable AI that: 1) is built and used responsibly and ethically, 2) advances international competitiveness and national security, and 3) serves society broadly, not narrowly.
+A Brief history of our Responsible AI journey:
+o In 2017, we established the AETHER Committee. Members include researchers, engineers and policy experts to focus on responsible AI issues. AETHER stands for AI, Ethics, and Effects in Engineering and Research. They are an executive committee, formed as an advisory group for Microsoft’s SLT.   
+o In 2018, Microsoft developed its 6 core principles centered around an ethical framework to help guide our work.  
+o In 2018, we called for facial recognition regulation and published our facial recognition principles later that same year to guide how we plan to develop and deploy facial recognition technology.  We later announced that Microsoft is restricting the sale of facial recognition technology to US Police until there is a strong regulation in place grounded in human rights. 
+o In 2019, we formally created the Office of Responsible AI led by Natasha Crampton, the company’s Chief RAI Officer and launched the first version of our RAI Standard.  
+o In 2020, we formed the RAI in Systems Engineering (RAISE), working with engineering teams to enable the implementation of Microsoft's responsible AI rules and processes across engineering groups.  
+o In 2022, we strengthened our RAI Standard by releasing its second version which we have also shared publicly so others can build on this work.  
+* Microsoft continues to build out our Responsible AI Program, investing in research, policy, and engineering to help our systems perform fairly, accurately and safely. We have a set of principles that guide our efforts. Advancing transparency and keepinghumans accountable for the performance of AI systems is core to this work.  Core elements of this program include:  
+o Our Responsible AI Program, Impact Assessment template and guide (a set of rules and processes that teams follow when developing and deploying AI systems),
+o developing responsible AI tooling, including the open sourced Responsible AI dashboard that helps developers better identify and address responsible AI challenges in their AI systems.
+* For our generative AI systems specifically, we use state-of-the-art methods to identify, measure, and mitigate their risks building on our years of experience operating large scale enterprise and consumer services and our deep partnership with OpenAI. 
+AI Regulatory landscape 
+* The rapid growth in popularity of generative AI has brought with it a step change in lawmaker interest on AI issues, driven by concerns about the risks this technology may pose if not used responsibly. Around the world, lawmakers are moving forward with regulatory proposals that reflect different approaches: 
+o EU is moving forward with its horizontal AI Act, which would impose regulatory requirements (including risk assessment and mitigation) on high-risk AI systems developed to be used in high stakes domains and prohibit certain AI practices considered a clear threat to EU citizens’ rights. With GDPR-like fines, this AI Act is expected to be passed in 2023 and come into force after a two year implementation window.
+o EU also proposed new liability rules for AI systems (AI Liability Directive) and added AI and software as “products” under rules that apply to no-fault liability claims (Product Liability Directive).  Proposals to be debated in 2023.
+o US, UK and Japan are advancing approaches focused more on voluntary governance frameworks, such as the NIST AI Risk Management Framework and sector specific requirements for high-risk systems. 
+o Other countries including Canada, Korea and Brazil are also advancing proposals, and regulatory conversations continue to develop across a wide range of markets. 
+* Microsoft believes that new rules are needed to guide the use of this technology.  Microsoft will continue to participate in broader societal conversations about whether and how AI should be used and is committed to sharing our learnings/best practices with decision makers as government, civil society, and industry come together to ensure that laws, norms, and standards are in place to guide responsible use. 
+* Microsoft is leaning in to help contribute to regulatory discussions, including by participating in multistakeholder forums to share experience from our responsible AI work. We are a founding member of the Partnership on AI, the Rome Call on AI Ethics, the IDB’s fAIrLAC initiative, and we have engaged deeply with the AI work of international organizations like OECD and UNESCO.
+* Informed by our internal work to identify and address AI risk, we believe regulation should be:
+o Risk based: focusing resources and safeguards on the highest risk applications.
+o Outcomes focused: setting out what regulated actors must achieve rather than how they achieve it. Requirements for an application to deliver a similar quality of service to different demographic groups will be more effective and durable than highly prescriptive requirements that datasets be “error free.” 
+o Adaptable and aligned to international norms and standards: Process related requirements, e.g., requiring teams building a high-risk application to identify and mitigate its potential risks will help frameworks remain relevant and effective in the face of rapid developments in AI technology and responsible AI practice. Empowering and upskilling existing regulators to identify how to use AI and where to update regulation in response to AI’s impact on their sector will likely further advance adaptability. Alignment to international norms and standards, including the important work of the OECD and best practices like the new NIST AI Risk Management Framework, will be important so that organizations can collaborate across borders and access state of the art technology.
+Enterprise Risk Management and Foundational Models
+* Large Language Models (LLMs) or Foundational Models like GPT4 offer immense promise to transform how our customers and partners operate.  
+* Like any technology that we make available to customers, Microsoft strives to inform customers about the capabilities, and the potential limitations and risks, of such new technologies. 
+* Open AI recently published a whitepaper “GPT-4 System Card” that outlines a range of “safety challenges” which remain in GPT-4 even after safety processes that Open AI adopted to prepare GPT-4 for release.
+* These safety challenges include potential for “hallucinations,” or the production of content that is nonsensical or untruthful (while believable and convincing), as well as a range of the risks related to the potential for GPT-4 to produce harmful or offensive content and disinformation content.
+* Customers and partners using Open AI technology such as GPT-4 will- in Open AI’s words- need to understand “the need for anticipatory planning and governance” that addresses these residual safety risks which remain in GPT-4.
+* For many of our customers and partners, interest in use of LLMs such as GPT-4 will be substantial and these residual safety challenges and risks may present enterprise-wide risks that need to be incorporated into and addressed via the customer or partner’s enterprise risk management framework.
+* Key aspects of AI development that will need to be incorporated into the enterprise risk management framework include processes to identify potential uses of LLMs within the enterprise and assess risks of use cases, as well as a process to identify potential mitigations which can be imposed via existing responsible AI or regulatory compliance programs.
+* The Azure OpenAI Service transparency note provides useful information and recommendations, building on Microsoft’s experience, for responsible use of the service as well as system limitations that may be applicable to customers’ scenarios.
+Key Resources
+* Seller resource for all-up Microsoft AI story:  Microsoft Transform | AI news and announcements across the Microsoft Cloud
+* Microsoft Responsible AI: Responsible AI principles from Microsoft 
+* Office of Responsible AI: Welcome to the Office of Responsible AI (sharepoint.com)
+* AI Messaging guidelines for marketing: AI Messaging Guidelines (sharepoint.com)
+* Azure customer stories campaign:  Azure AI Customer Stories | Microsoft AI
+FAQ: Background on Microsoft and OpenAI
+What is OpenAI?
+OpenAI is a private artificial intelligence research laboratory consisting of the for-profit OpenAI LP and its parent company, the non-profit OpenAI Inc. The company was founded in December 2015 with the mission of building advanced artificial intelligence capabilities, aspiring to the goal of achieving Artificial General Intelligence (AGI).
+OpenAI conducts research on a wide range of topics related to artificial intelligence, including machine learning, computer vision, natural language processing, and robotics. The company researches and develops various generative models, such as GPT-4, ChatGPT, GPT-3, Codex and DALL-E.
+What is the Microsoft and OpenAI relationship?
+We have had an existing investment and collaborative relationship with OpenAI since 2019. Our relationship has accelerated the development and commercialization of AI products and services, promoting innovation in technology critical to global competitiveness. On January 23, 2023, we announced the next phase of that relationship. It involves a multiyear multibillion dollar commitment from Microsoft to continue to invest in, innovate on, and build an advanced AI computing infrastructure used for the research, development, and commercialization of OpenAI’s AI models, such as ChatGPT. And it continues to enable Microsoft and OpenAI to commercialize the resulting AI technology and innovations. OpenAI can independently commercialize their models both in 1st party products and with 3rd party customers, and Azure remains the exclusive cloud provider for OpenAI workloads.
+
+Microsoft and OpenAI share a commitment to building AI systems and products that are trustworthy and safe. OpenAI’s leading research on AI Alignment and Microsoft’s Responsible AI Standard not only establish a leading and advancing framework for the safe deployment of our own AI technologies, but will also help guide the industry toward more responsible outcomes.
+What are GPT, Codex, DALL-E, and ChatGPT?
+GPT (Generative Pre-trained Transformer) is a family of language models developed by OpenAI. These models are pre-trained on a large corpus of text data and some can be custom-tuned for a variety of natural language processing tasks, such as language translation, text summarization, and question answering. GPT-4 is the latest and most advanced model in the GPT series, which has set a new level of performance on many natural language understanding benchmarks.
+Codex is an AI-powered code search and completion tool that allows developers to search through code repositories and find examples of how to use specific APIs or programming constructs. It uses a GPT-3 based model to generate natural-language descriptions of code examples and can generate code snippets as well.
+DALL-E is a generative model developed by OpenAI. DALL-E generates images from text prompts, it can produce images of objects and scenes that do not exist in the real world but are constructed by the model based on the text description provided. The model can also generate variations of image inputs based on a text prompt. DALL-E is trained on a massive dataset of images and captions, allowing it to learn the relationship between language and visual content.
+ChatGPT is a variant of the GPT-3.5 (Generative Pre-trained Transformer) model that is specifically designed for conversational AI applications, such as dialogue systems and chatbots. It is trained on a dataset of conversational interactions. It uses a transformer-based neural network architecture, which is pre-trained on a large dataset of text and custom-tuned on conversational interactions dataset.
+When a user inputs a statement or question, ChatGPT generates a response by analyzing the input and considering the context of the conversation (which is included with the prompt). It then generates a response using the patterns it has learned from the training dataset, which aims to be coherent with the conversation’s context and also human-like. ChatGPT can be used for  specific tasks such as answering questions or providing customer service.
+ChatGPT is used to build conversational interfaces for various applications, such as virtual assistants, customer service chatbots, and conversational agents for gaming and entertainment. 
+How does this connect into the strategy with Microsoft’s own AI models such as Turing and Megatron? 
+Turing and Megaton are large AI models and continue to help drive research. These models power features within Text Analytics and Microsoft Translator services. We will continue to leverage our model investments and our licensed models like Turing, Megatron and GPT to deliver Applied AI and Cognitive Services and features based on customer demand. There is a rapid expansion of models, and Microsoft is at the center of it all by enabling customers to benefit from each model’s strengths.
+FAQ: Azure OpenAI Service
+What is the current competitive landscape of generative AI?
+The generative AI space is growing in demand and has become a highly competitive space, with several major players vying for position including Google, AWS, GCP, and Databricks. Anthropic is another important player in the space.
+* Google's generative AI toolkit, including its popular GPT models, has been widely adopted by businesses and developers. Google's Cloud AI platform provides a range of AI and machine learning tools, including natural language processing and computer vision.
+* AWS has released Bedrock, an AI toolkit for the enterprise that provides a suite of generative AI tools, including chatbot building technology. Bedrock grants access to various AI models from different companies, including Anthropic’s Claude, Stability AI’s Stable Diffusion, AI21’s Jurassic-2, and Amazon’s Titan. For more information on the recent Amazon announcements, please reference this comparison document of Azure OpenAI Service and AWS Bedrock, which also includes updates from GCP, Databricks and Anthropic.
+* GCP (Google Cloud Platform) provides a range of AI and machine learning tools, including its own version of the GPT models, as well as vision, speech, and language processing.
+* Databricks has released Dolly 2.0, an open-source instruction-following large language model (LLM), as well as free training data to help companies develop AI chatbots in-house. Dolly 2.0 is designed to provide an on-premises solution for businesses that want to keep their AI capabilities secure.
+* Anthropic is a generative AI startup that provides a suite of tools for building AI models, including its own model called Claude. Claude is designed to mimic human intuition and decision-making processes, making it ideal for applications like natural language processing 
+What is Azure OpenAI Service?
+Azure OpenAI Service is an Azure AI service that offers access to OpenAI’s models in the Azure platform. These models can be adapted to tasks such as content generation, summarization, semantic search, and natural language to code translation. Users access the service through REST APIs, Python SDK, or the web-based interface in the Azure OpenAI Studio. This service allows developers to discover the art-of-the-possible with cutting-edge models from OpenAI and to take their use-cases to production with the enterprise-grade reliability, security, support, and global availability that comes with Microsoft Azure.
+Today, a selection of the OpenAI Models are available, including GPT-4 (preview), GPT-3, Codex, Embeddings, DALL-E (private preview) and ChatGPT (preview).
+How is Azure OpenAI Service different from OpenAI?
+Azure OpenAI Service provides access to innovative models from OpenAI, combined with the benefits of Azure for customers who require enhanced security, compliance, increased data security, responsible AI practices, SLA, and support. Customers can leverage Azure OpenAI Service to build their applications combining models from OpenAI with their own data in Azure, creating compelling use cases unique to their organization.
+OpenAI will continue to publish and develop their own models and we expect OpenAI will be more focused on prototyping, experimenting, and research. They will also have first release of models, and Microsoft expects to follow by adding OpenAI models to Azure OpenAI Service within weeks of their launch. 
+When did the service GA?
+Azure OpenAI Service reached General Availability on December 14th, 2022. At GA, the service is guaranteed with the enterprise-grade security, SLA, privacy controls, regulatory compliance offerings (see Microsoft Azure Compliance Offerings for more information), geo diversity (in other words, availability in multiple Azure regions, see Product availability by region for details), and support services that customers expect from Microsoft Azure. So, onboarded customers will benefit from these capabilities for the applications they design using the Azure OpenAI Service. 
+
+While Azure OpenAI Service is GA, some available OpenAI models remain in preview, including DALL-E (private preview). On May 15, we made GPT-4 and ChatGPT generally available to customers.
+Why is the service limited access? How does limited access work? 
+We limit access to the service to promote responsible use and limit the impact of high-risk use cases, especially as we continue to learn how to deliver the service responsibly. Information on limited access can be found at Limited Access. Customers can apply here for access; they must register all of their planned uses of the Azure OpenAI Service using the registration form. If a customer wants to add new uses not selected in their initial registration form, they should complete this form. 
+Are there any geographic restrictions that would impact a customer’s ability to gain access to Azure OpenAI Service as a global Azure offering?
+There are no geographic restrictions that preclude customers from accessing Azure OpenAI as a global Azure service in the supported datacenters found at Product availability by region. There are non-geographical limitations on access to the service, such as the Limited Access controls as set out here: Limited Access to Azure OpenAI Service.
+Is there datacenter availability information for Azure OpenAI Service?
+Yes.  Datacenter availability by region can be found at Product availability by region.
+What is the pricing for Azure OpenAI Service? 
+Please refer to this pricing page.
+Are the models on Azure OpenAI open source?
+No, the models available through the Azure OpenAI are not open source. Neither Microsoft nor OpenAI release these underlying models as open source.
+Does Azure OpenAI Service include ChatGPT?
+ChatGPT, a GPT-3.5 model fine-tuned for conversations, is now available in Azure OpenAI Service in preview. Customers and partners can use the ChatGPT model to build a conversational AI experience.
+How does the Azure OpenAI Service ChatGPT model differ from the OpenAI ChatGPT model?
+They are both the same underlying model, a fine-tuned version of the GPT-3.5 model, although the actual versions may differ slightly.
+Once a customer receives access to Azure OpenAI Service, will they automatically get access to the Azure OpenAI Service ChatGPT model?
+Yes. The ChatGPT model is available in preview through the API in Azure OpenAI Service and the Playground interface in Azure OpenAI Studio.
+How much will ChatGPT cost?
+Please refer to this pricing page. 
+Can I get a ChatGPT demo from Microsoft?
+Please visit the AOAI GearUp page here for pre-recorded demo videos. If you would like to schedule a demo for your customer, please submit a request on http://aka.ms/EngageAI.
+How do I implement ChatGPT and how can I get started?
+Please refer to this page on Microsoft Learn. Also, refer to this How-To guide.
+What is GPT-4? 
+GPT-4 is the latest milestone in OpenAI’s effort in scaling up deep learning models. GPT-4 is now available in Azure OpenAI in preview and has more advanced capabilities in reasoning, creativity, and image understanding. According to OpenAI, GPT-4 also features advancements in safety capabilities put in place by OpenAI based on OpenAI’s experience with ChatGPT and other models. 
+
+How is GPT-4 different from GPT-3 or ChatGPT? 
+* GPT-3: A large language model that can generate text given a set of instructions or prompts. The latest version of this model is GPT-3.5, which can be accessed via an API through Azure OpenAI Service and from OpenAI. 
+* ChatGPT: A new conversational AI model that is part of the GPT-3.5 family that is significantly less expensive to run. This is currently available as a consumer-accessible application directly from OpenAI, and via an API through both OpenAI and the Azure OpenAI Service. 
+* GPT-4: According to OpenAI: “... a large multimodal model (accepting image and text inputs, emitting text outputs) that, while less capable than humans in many real-world scenarios, exhibits human-level performance on various professional and academic benchmarks.”  
+How should I position GPT-4 with customers? 
+We should encourage customers to proceed with projects built using the models already available on Azure OpenAI Service. ChatGPT and the other models available within Azure OpenAI service are suitable for most applications requiring generative AI that customers are building today. If there are specific use-cases that your customer believes requires GPT-4 or if they just want to experiment with it, please invite them to apply for access to the model.
+When should I use GPT-4 vs other OpenAI models? Use cases?
+GPT-4 can solve problems with greater accuracy using broader knowledge and advanced reasoning capabilities. GPT-4 also has 32k token support, meaning you can input longer documents into the prompt context that for other models.  That said, we should encourage customers to proceed with projects built using the models already available on Azure OpenAI Service.  ChatGPT and the other models available within Azure OpenAI service are suitable for most applications requiring generative AI that customers are building today.
+Can I use the Text Completions API with GPT-4?
+GPT-4 is available using the Chat Completions API and in the Azure OpenAI Chat Playground. It is not available with the Text Completions API. Read this blog to learn more.
+Which regions is GPT-4 available in for AOAI Service?
+For the most up-to-date information, please refer to this page.
+Will images be available with GPT-4 in Azure OpenAI Service?
+No, images input mode is currently not available as part of the GPT-4 functionality.
+Will GPT-4 be available to all customers who have access to AOAI Service?
+Customers who have access to the Azure OpenAI Service will be eligible to join the waitlist for GPT-4. To join the waitlist, please complete this form: https://aka.ms/oai/get-gpt4 
+How will GPT-4 be priced?
+For the latest pricing, please see the pricing page. For pricing information at the time of announcement, please refer to the announcement blog.
+How effective is using Azure OpenAI Service in intelligence scenarios?
+As a generative system the service can be used to summarize and interpret vast data sources, as such this can be highly effective in enhancing efficiency in intelligence scenarios. However, due to the limitations of hallucinations, and ability to provide an understanding of correctness, caution should be taken in result produced by the system and should always be backed using the underlying original data sources. For more information on risk assessment and mitigation and approved uses, see Use cases for Azure OpenAI and Code of Conduct for the Azure OpenAI Service.
+Where do I go to find out if a product or functionality is in preview or generally available?
+Please see the document at https://learn.microsoft.com/en-us/azure/cognitive-services/openai/concepts/models#finding-the-right-model.
+FAQ: IP, Data Usage, Data Privacy, Data Ownership, and Responsible AI
+Customer legal wants to know what legal terms apply to the Azure OpenAI Service.
+Azure OpenAI is an Online Service, subject to the Universal License Terms for Online Services in the Product Terms (www.aka.ms/productterms) and the DPA (www.aka.ms/dpa), which are incorporated in customer's license agreement. Azure OpenAI is also an Azure Cognitive Service, subject to Product Terms that apply to all Azure Cognitive Services and Applied AI Services and to Product Terms that are specific to Azure OpenAI (including the Limited Access Service terms). (For models and features designated as previews, the Online Services Preview terms and limitations in the DPA apply.)
+The product documentation for Azure OpenAI is available here, including details regarding supported models. The Responsible AI section of the documentation (see the Table of Contents in the left-side navigation pane) includes useful information such as the Transparency Note, Code of Conduct, Limited Access procedures, and data processing details. Information regarding Azure compliance offerings for Azure OpenAI is in the Azure Compliance Offerings document (Azure OpenAI appears in the table on page 67).
+Does Microsoft use customer data to train or improve the models?
+Training data provided by the customer is only used to custom-tune the customer’s model and is not used by Microsoft to train or improve any Microsoft models. Prompts and completions processed by the Azure OpenAI Service are not used to train, retrain or improve the models. Please refer to this link on Microsoft Learn to understand how Azure OpenAI Service processes data. 
+What Responsible AI capabilities and safety systems can I use with my models? 
+Azure OpenAI has a built-in content filtering system. The system is used to filter harmful and inappropriate content synchronously. The system currently supports filtering of sexual, hate, self-harm and violent content. We will continue to add new content filters as the service evolves.  We welcome any feedback from customers about additional categories they would like to see filtered. The system also monitors activity that could signal some form of abuse so that customers can be alerted if someone is misusing their application. 
+Does ChatGPT have filtering? And is there any difference in filtering between ChatGPT for OpenAI and ChatGPT from Azure OpenAI Service?
+Azure OpenAI has a built-in content filtering system. The system is used to filter harmful and inappropriate content (inputs and outputs) synchronously. The system currently supports filtering of Sexual, Hate, Self-Harm and Violent content. We will continue to add new content filters as the service evolves.  We welcome any feedback from customers about additional categories they would like to see filtered. Microsoft's content filters differ from OpenAI’s filters and have been designed to support a range of experiences.
+Does Microsoft claim ownership of the output generated from the Azure OpenAI service?
+The Azure OpenAI Service is governed by its service terms. Under these terms, Microsoft does not claim ownership of the output of the service. Except for our acceptable use policies, Microsoft’s terms do not restrict the commercialization of content generated by the service, although customers are ultimately responsible for making their own decisions about the commercial usability of content they generate.
+Microsoft’s position reflects the reality that laws are evolving around the scope of intellectual property (IP) rights protection available for works output by generative AI. As these laws evolve, we are clarifying that Microsoft does not claim ownership in a Customer’s Output Content. However, a customer’s IP rights in that content may be limited by local laws or regulations that restrict whether IP rights can exist in AI-generated content, or because the customer's prompt was similar to another customer's prompt and resulted in similar Output Content. Thus, customers will need to make their own determination regarding the IP rights they have in Output Content, given their usage scenario(s) and the laws of the relevant jurisdiction.
+Who is responsible for third-party claims regarding use of Azure OpenAI Service in compliance with applicable laws?
+The Product Terms for Azure OpenAI Service state “Customer is responsible for responding to any third-party claims regarding Customer's use of the Azure OpenAI Service in compliance with applicable laws (including, but not limited to, copyright infringement or other claims relating to Output Content output during Customer's use of the Azure OpenAI Service).”
+Can all models in Azure OpenAI be custom-tuned?
+No, custom-tuning is not available for all models available in the Azure OpenAI Service. ChatGPT and GPT-4 cannot currently be custom-tuned. More information about supported models and ability to fine-tune is available here: Azure OpenAI Service models
+Can a customer build their own customized LLM like ChatGPT using their own data?
+Azure offers industry leading infrastructure which makes it possible for companies like OpenAI to build these models, like ChatGPT. However, it can take years of research and a huge investment to do so. We encourage customers to explore the capabilities available in Azure OpenAI and other Azure Cognitive Services The best path for most customers is to use these LLMs, customized them using prompt engineering, to build solutions that take advantage of this new technology. If pre-built Azure AI solutions are not meeting a customer’s needs, Azure Machine Learning provides capabilities that enable data scientists and developers to build, deploy, and manage high-quality models.
+Are there any new or updated Responsible AI considerations?
+In Azure OpenAI, an integrated safety system filters harmful and inappropriate content (inputs and outputs) synchronously. The system currently supports filtering of Sexual, Hate, Self-Harm and Violent content. We will continue to add new content filters as the service evolves.  We welcome any feedback from customers about additional categories they would like to see filtered. The system also monitors for misuse. On top of that, we provide guidance and best practices for customers (see Use cases for Azure OpenAI - Azure Cognitive Services) to enable them to responsibly build and deploy applications using these models. 
+With GPT-4, new research advances from OpenAI have enabled an additional layer of protection. Guided by human feedback, OpenAI has implemented various safety measures throughout the development of the GPT-4 model, which enables the model to be more effective at handling harmful inputs, thereby reducing the likelihood that the model will generate a harmful response. Learn more from OpenAI here.
+May customers apply to modify/discontinue (i) content filtering, (ii) abuse monitoring, or both items (i) and (ii)? May a customer request to keep in place (i) content filtering but discontinue (ii) abuse monitor?
+Yes. Customers may use this form to apply to modify either or both of these aspects of the content safety system (see Q23). Once approved (based on Microsoft eligibility and use case criteria), the customer works with the product team to get the appropriate modifications in place. 
+Does Microsoft monitor the use of Azure OpenAI Service?
+Data Processing details for the Azure OpenAI Service can be found at data, privacy, and security.  
+Is it okay for customers to share confidential information with the models, including ChatGPT, available on Azure OpenAI Service?  
+Although powered by models built by OpenAI, Azure OpenAI is a Microsoft service protected by the most comprehensive enterprise compliance and security controls in the industry. The service is subject to Microsoft’s Data Protection Addendum and service terms. Detailed information about how Azure OpenAI processes data, including our commitment that data processed by the service is not used to train the foundational AI models, is available at data, privacy, and security.
+Can 3P customers request to use output data from Azure OpenAI models to train their own open-source models? 
+The Azure OpenAI Product Terms prohibit the use of the service “to discover any underlying components of the models, algorithms, and systems, such as exfiltrating the weights of models” and prohibit customers from using “web scraping, web harvesting, or web data extraction methods to extract data from the Azure OpenAI Service or from Output Content.” In addition, the terms for all Azure Cognitive Services and Applied AI Services provide that customers may not use “the Services or data from the Services to create, train, or improve (directly or indirectly) a similar or competing product or service.”
+What does Azure do with these kinds of requests? 
+This is not an approved use scenario in the Limited Access registration form.
+Does Microsoft have a duty to defend related to the customer for the use of AI products and services?  
+Microsoft’s duty to defend is as set forth in the customer’s Azure contract stack.  In the event a Microsoft Customer Agreement or Microsoft Business and Services Agreement includes a duty to defend, such duty to defend that only applies to the product itself, not the output content. Customer is responsible for responding to any third-party claims regarding Customer’s use of the Azure OpenAI Service  (including, but not limited to, copyright infringement or other claims relating to Output Content output during Customer’s use of the Azure OpenAI Service). 
+Is a GPT application calling from China and being processed in the US and returning data to China legally compliant in light of the American export controls to China?
+AOAI services are not legally prohibited or subject to export control because such prompts, and the generative responses to these prompts, are akin to Internet searches (i.e. traditional Bing or Google searches). 
+Is there a Data Protection Impact Assessment (DPIA) for Azure OpenAI Service?
+There is a Data Protection Impact Assessment (DPIA) in progress for Azure OpenAI Service.  There is not an ETA for when it will be finalized.
+
+FAQ: Internal Questions
+Does Azure OpenAI Service retire my quota?
+Yes! Azure OpenAI Service is part of our Azure AI portfolio, so it will retire ADS revenue. Consumption can be viewed in the Azure Health Report under the Service Hierarchy of Cognitive Services > Azure OpenAI Service.
+Should I be selling Azure OpenAI Service actively in my accounts?
+Yes, but be advised that unlike most other Azure services available in GA, this service operates under the limited access framework. Per the framework, we require customers to apply to be onboarded as described at Limited access to Azure OpenAI Service. Due to the generative nature of the OpenAI models used in this service, use is limited to approved customers and use cases . 
+There is a lot of hype around Azure OpenAI Service and my customer(s) are very interested. What do I do?
+Leverage this opportunity to engage your C-level executives and business leaders on the conversation regarding Azure OpenAI Service, Azure AI, and the importance of establishing a strong data foundation in Azure supported by cloud-native app practices. By only answering questions on Azure OpenAI Service, we are missing a significant momentum to highlight the value of our overall Data, Apps, and AI offerings. 
+For customers specifically looking to evaluate the OpenAI model capabilities and those who require enterprise features (such as data security, compliance, geo-diversity and SLA), we recommend them to try Azure OpenAI Service. This service is now generally available as a Limited Access Service. Interested customers are required to fill out the form here. To learn more about Limited Access to Azure OpenAI service, see here. For access to GPT-4, they will have to fill out an additional form.
+If my customer or partner’s access is approved, what is next? 
+Once a customer’s application is approved, their Azure Subscription will be enabled for using the service. They will receive an acceptance email with the next steps for getting started.  
+What is a good set of steps to follow for exploring the models?
+Please refer to this Azure OpenAI Service Documentation page on Microsoft Learn for tutorials and more.
+Can I get access to Azure Open AI Service?
+Microsoft employees are eligible to apply for access to the Azure OpenAI Service, however customer requests will be prioritized. Please submit a request for access using the same public link as our customers: Azure OpenAI public form
+If the customized Enterprise Agreement or Online Services Terms conflict with the Azure Cognitive Services terms what terms govern?
+The Enterprise Agreement states - "In the case of a conflict between any document in this agreement that is not expressly resolved in those documents, their terms will control in the following order, from highest to lowest priority: (1) the Master Agreement, (2) this Enterprise Agreement, (3) any Enrollment, (4) the Product Terms, (5) the Online Services Terms, (6) orders submitted under this agreement, and (7) any other documents in this agreement. Terms in an amendment control over the amended document and any prior amendments concerning the same subject matter." In addition, the terms formerly contained in the "Online Services Terms" have been moved into the "Product Terms" and no longer exist as a standalone document. The unified Product Terms, which include service-specific terms for Azure OpenAI, are incorporated by reference into agreements governing a customer's use of Microsoft Products and Professional Services.
+Do the geographic restrictions of OpenAI API impact Microsoft’s customers’ access to Azure OpenAI as a global Azure offering?
+The terms for the OpenAI API do not apply to the Azure OpenAI Service. Azure OpenAI Service is a Microsoft service that makes certain OpenAI models available through an Azure API, subject to Microsoft product terms. Our terms do not include the same geographic limitations as OpenAI’s. 
+How is Protected Health Information and Personally Identifiable Information handled on Azure OpenAI Service?
+Information on how personal data is handled in Azure OpenAI service is detailed at data, privacy, and security. Information about Azure Compliance Offerings is available here.
+The use case that I am talking about with the customer involves a human clinician in between the AI tool and the patient, doesn’t that mean that the tool is not subject to medical device regulation?
+No. Please see Guidance for Healthcare AI for additional information. 
+Are there limits on sales and marketing discussion of Healthcare AI with customers and partners?
+Yes, there are limits. Please see Guidance for Healthcare AI for additional information.
+Are there limits on solution building work with Healthcare customers?  
+Yes, there are limits. Please see Guidance for Healthcare AI for additional information.
+Where can I find more information? 
+All assets are available on our Azure AI GearUp page: https://aka.ms/AOAI. Below is a shortlist for some of the assets available, including our public Docs pages.
+* Azure OpenAI Briefing Deck: https://aka.ms/AOAI-PitchDeck
+* Azure OpenAI Pitch Video: https://aka.ms/AOAI-PitchVideo
+* Technical Demo Video: https://aka.ms/AOAI-DemoVideo
+* Field FAQ (this document): https://aka.ms/AOAI-FieldFAQ
+* Quick-reference Sales Guidance: https://aka.ms/AOAI-SalesGuidance
+* Azure OpenAI Product Page: Azure OpenAI Service | Microsoft Azure
+* Azure OpenAI Service Documentation: Azure OpenAI Service - Documentation, quickstarts, API reference - Azure Cognitive Services | Microsoft Learn
+* Microsoft Mechanics Walkthrough video: https://www.youtube.com/watch?v=3t3qZu1Dy1k
+Azure AI resources:
+* Internal: AI GearUp   Industry Use Case Megamap   AI Engagement Requests
+* For customers: Azure AI solutions 
+Customer-ready Responsible AI resources:
+* Microsoft’s Responsible AI principles 
+* Our approach to AI 
+* Azure OpenAI Transparency Note and Code of Conduct
+Who do I contact if I need more information about Azure OpenAI Service?
+Leverage the assets available on our Azure OpenAI GearUp page: https://aka.ms/AOAI 
+If you have an immediate, qualified customer opportunity ready for commit, please raise a request to OneAsk for GBB support. If you’re looking for technical expertise to deploy or scale a project, please make a request to our Specialized CSU team.
+For all other requests, please contact the Azure AI Sales Team <aisolsales@microsoft.com>  
+Can all partners request access for a customer? 
+Partners are not able to complete the Limited Access registration form on behalf of their customers, Partners should ask their customers to complete the registration form here.
+Can ISVs build apps using Azure OpenAI Service?
+Yes. They should request access here.
+How does the Azure OpenAI Service ChatGPT model differ from the model Bing uses?
+They are varieties of the same GPT family of models. It is strongly advised not to divulge more information or formulate an explanation, primarily because this is a fast-moving space and product changes are happening rapidly.        
+If a customer wants to use AOAI for use cases they did not initially disclose, do they need to come to us for approval?
+The answer to this is yes.  The answer to this question can be found in the form that customers must complete to request access to Azure OpenAI Service. Here is the link for future reference   Request Access to Azure OpenAI Service (microsoft.com) .  The first paragraph of the document states “All use cases must be registered.” It also states “If you are a current Azure OpenAI customer and would like to add additional use cases, please fill out the Azure OpenAI Additional Use Case form.”  There is also the document that sets forth the limited access terms for Azure OpenAI Service found here Limited access to Azure OpenAI Service - Azure Cognitive Services | Microsoft Learn which states “Customers who wish to add additional use cases after initial onboarding must submit the additional use cases using this form.”  There is a link to the form in the document.  
+Do we monitor/check if customers are using the services for the approved use cases? How?
+We monitor to investigate patterns of abuse and misuse of the Azure OpenAI Service; we may also take action if we receive a report or independently learn that a customer is using Azure OpenAI for an unapproved usage scenario. The answer to this question can be found in the FAQs under the question do we monitor the use of Azure OpenAI Service. There is also more information on monitoring that is contained the product terms at this link https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzure/EAEAS and in Data, privacy, and security for Azure OpenAI Service - Azure Cognitive Services | Microsoft Learn.
+
+
+
