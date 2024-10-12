@@ -19,7 +19,7 @@ export default function App() {
         <HashRouter>
             <Routes>
                 <Route path="/" element={<Layout />}>
-                    <Route path="upload" element={<Upload />} />
+                    <Route index element={<Upload />} />
                     <Route path="summary" element={<Summary />} />
                     <Route path="help" index element={<Help />} />
                     <Route path="*" element={<NoPage />} />

@@ -5,6 +5,8 @@ from Utilities.azureBlob import getAllBlobs
 from Utilities.cogSearch import deleteSearchIndex
 from azure.storage.blob import BlobClient
 from Utilities.envVars import *
+from azure.identity import ClientSecretCredential, DefaultAzureCredential
+from azure.storage.blob import BlobServiceClient
 
 def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
     logging.info(f'{context.function_name} HTTP trigger function processed a request.')
@@ -60,12 +62,16 @@ def IndexManagement(indexType, indexName, blobName, indexNs, operation, record):
             logging.info("Deleting index " + indexNs)
             if indexType == "cogsearch" or indexType == "cogsearchvs":
                 deleteSearchIndex(indexNs)
-            blobList = getAllBlobs(OpenAiDocConnStr, OpenAiDocContainer)
+            blobList = getAllBlobs(TenantId, ClientId, ClientSecret, BlobAccountName, OpenAiDocContainer)
+            credentials = ClientSecretCredential(TenantId, ClientId, ClientSecret)
+            blobService = BlobServiceClient(
+                    "https://{}.blob.core.windows.net".format(BlobAccountName), credential=credentials)
             for blob in blobList:
                 try:
                     if (blob.metadata['indexName'] == indexName):
                         logging.info("Deleting blob " + blob.name)
-                        blobClient = BlobClient.from_connection_string(conn_str=OpenAiDocConnStr, container_name=OpenAiDocContainer, blob_name=blob.name)
+                        blobClient = blobService.get_blob_client(OpenAiDocContainer, blob=blob.name)
+                        #blobClient = BlobClient.from_connection_string(conn_str=OpenAiDocConnStr, container_name=OpenAiDocContainer, blob_name=blob.name)
                         blobClient.delete_blob()
                 except:
                     continue

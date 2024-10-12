@@ -34,7 +34,11 @@
       "SearchService":"", // Search Service 
       "SearchKey":"", // Search Key
       "BingUrl": "https://api.bing.microsoft.com/v7.0/search",
-      "BingKey": ""
+      "BingKey": "",
+      "ClientId":"",
+      "TenantId":"",
+      "ClientSecret":"",
+      "BlobAccountName":""
     },
     "Host": {
       "LocalHttpPort": 7071,

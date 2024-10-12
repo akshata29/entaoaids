@@ -12,6 +12,7 @@ from azure.search.documents import SearchClient
 from azure.core.credentials import AzureKeyCredential
 from azure.cosmos import CosmosClient, PartitionKey
 from distutils.util import strtobool
+from azure.identity import ClientSecretCredential, DefaultAzureCredential
 
 load_dotenv()
 app = Flask(__name__)
@@ -236,11 +237,17 @@ def verifyPassword():
 def refreshIndex():
    
     try:
-        url = os.environ.get("BLOB_CONNECTION_STRING")
-        containerName = os.environ.get("BLOB_CONTAINER_NAME")
-        blobClient = BlobServiceClient.from_connection_string(url)
-        containerClient = blobClient.get_container_client(container=containerName)
-        blobList = containerClient.list_blobs(include=['tags', 'metadata'])
+        print("In refreshIndex")
+        # url = os.environ.get("BLOB_CONNECTION_STRING")
+        # containerName = os.environ.get("BLOB_CONTAINER_NAME")
+        # blobClient = BlobServiceClient.from_connection_string(url)
+        # containerClient = blobClient.get_container_client(container=containerName)
+        credentials = ClientSecretCredential(os.environ.get("TENANTID"), os.environ.get("CLIENTID"), os.environ.get("CLIENTSECRET"))
+        blobService = BlobServiceClient(
+                "https://{}.blob.core.windows.net".format(os.environ.get("BLOB_ACCOUNT_NAME")), credential=credentials)
+        containerClient = blobService.get_container_client(os.environ.get("BLOB_CONTAINER_NAME"))
+
+        blobList = containerClient.list_blobs(include=['metadata'])
         blobJson = []
         for blob in blobList:
             #print(blob)
@@ -353,11 +360,14 @@ def uploadFile():
         contentType=request.json["contentType"]
         if contentType == "text/plain":
             fileContent = request.json["fileContent"]
-        url = os.environ.get("BLOB_CONNECTION_STRING")
-        containerName = os.environ.get("BLOB_CONTAINER_NAME")
-        blobClient = BlobServiceClient.from_connection_string(url)
-        blobContainer = blobClient.get_blob_client(container=containerName, blob=fileName)
-        #blob_client.upload_blob(bytes_data,overwrite=True, content_settings=ContentSettings(content_type=content_type))
+        #url = os.environ.get("BLOB_CONNECTION_STRING")
+        #containerName = os.environ.get("BLOB_CONTAINER_NAME")
+        #blobClient = BlobServiceClient.from_connection_string(url)
+        #blobContainer = blobClient.get_blob_client(container=containerName, blob=fileName)
+        credentials = ClientSecretCredential(os.environ.get("TENANTID"), os.environ.get("CLIENTID"), os.environ.get("CLIENTSECRET"))
+        blobService = BlobServiceClient(
+                "https://{}.blob.core.windows.net".format(os.environ.get("BLOB_ACCOUNT_NAME")), credential=credentials)
+        blobContainer = blobService.get_blob_client(os.environ.get("BLOB_CONTAINER_NAME"), blob=fileName)
         blobContainer.upload_blob(fileContent, overwrite=True, content_settings=ContentSettings(content_type=contentType))
         #jsonDict = json.dumps(blobJson)
         return jsonify({"Status" : "Success"})
@@ -376,12 +386,15 @@ def uploadBinaryFile():
         fileName = file.filename
         blobName = os.path.basename(fileName)
 
-        url = os.environ.get("BLOB_CONNECTION_STRING")
-        containerName = os.environ.get("BLOB_CONTAINER_NAME")
-        blobServiceClient = BlobServiceClient.from_connection_string(url)
-        containerClient = blobServiceClient.get_container_client(containerName)
+        #url = os.environ.get("BLOB_CONNECTION_STRING")
+        #containerName = os.environ.get("BLOB_CONTAINER_NAME")
+        #blobServiceClient = BlobServiceClient.from_connection_string(url)
+        #containerClient = blobServiceClient.get_container_client(containerName)
+        credentials = ClientSecretCredential(os.environ.get("TENANTID"), os.environ.get("CLIENTID"), os.environ.get("CLIENTSECRET"))
+        blobService = BlobServiceClient(
+                "https://{}.blob.core.windows.net".format(os.environ.get("BLOB_ACCOUNT_NAME")), credential=credentials)
+        containerClient = blobService.get_container_client(os.environ.get("BLOB_CONTAINER_NAME"))
         blobClient = containerClient.get_blob_client(blobName)
-        #blob_client.upload_blob(bytes_data,overwrite=True, content_settings=ContentSettings(content_type=content_type))
         blobClient.upload_blob(file.read(), overwrite=True)
         blobClient.set_blob_metadata(metadata={"embedded": "false", 
                                         "indexName": "",
@@ -406,12 +419,15 @@ def uploadSummaryBinaryFile():
         fileName = file.filename
         blobName = os.path.basename(fileName)
 
-        url = os.environ.get("BLOB_CONNECTION_STRING")
-        summaryContainerName = os.environ.get("BLOB_SUMMARY_CONTAINER_NAME")
-        blobServiceClient = BlobServiceClient.from_connection_string(url)
-        containerClient = blobServiceClient.get_container_client(summaryContainerName)
+        #url = os.environ.get("BLOB_CONNECTION_STRING")
+        #summaryContainerName = os.environ.get("BLOB_SUMMARY_CONTAINER_NAME")
+        #blobServiceClient = BlobServiceClient.from_connection_string(url)
+        #containerClient = blobServiceClient.get_container_client(summaryContainerName)
+        credentials = ClientSecretCredential(os.environ.get("TENANTID"), os.environ.get("CLIENTID"), os.environ.get("CLIENTSECRET"))
+        blobService = BlobServiceClient(
+                "https://{}.blob.core.windows.net".format(os.environ.get("BLOB_ACCOUNT_NAME")), credential=credentials)
+        containerClient = blobService.get_container_client(os.environ.get("BLOB_SUMMARY_CONTAINER_NAME"))
         blobClient = containerClient.get_blob_client(blobName)
-        #blob_client.upload_blob(bytes_data,overwrite=True, content_settings=ContentSettings(content_type=content_type))
         blobClient.upload_blob(file.read(), overwrite=True)
         return jsonify({'message': 'File uploaded successfully'}), 200
     except Exception as e:
@@ -500,12 +516,15 @@ def summarizer():
 @app.route('/content/', defaults={'path': '<path>'})
 @app.route('/content/<path:path>')
 def content_file(path):
-    url = os.environ.get("BLOB_CONNECTION_STRING")
-    containerName = os.environ.get("BLOB_CONTAINER_NAME")
-    blobClient = BlobServiceClient.from_connection_string(url)
-    logging.info(f"Getting blob {path.strip()} from container {containerName}")
-    blobContainer = blobClient.get_container_client(container=containerName)
-    blob = blobContainer.get_blob_client(path.strip()).download_blob()
+    #url = os.environ.get("BLOB_CONNECTION_STRING")
+    #containerName = os.environ.get("BLOB_CONTAINER_NAME")
+    #blobClient = BlobServiceClient.from_connection_string(url)
+    #blobContainer = blobClient.get_container_client(container=containerName)
+    credentials = ClientSecretCredential(os.environ.get("TENANTID"), os.environ.get("CLIENTID"), os.environ.get("CLIENTSECRET"))
+    blobService = BlobServiceClient(
+                "https://{}.blob.core.windows.net".format(os.environ.get("BLOB_ACCOUNT_NAME")), credential=credentials)
+    containerClient = blobService.get_container_client(os.environ.get("BLOB_CONTAINER_NAME"))
+    blob = containerClient.get_blob_client(path.strip()).download_blob()
     mime_type = blob.properties["content_settings"]["content_type"]
     if mime_type == "application/octet-stream":
         mime_type = mimetypes.guess_type(path.strip())[0] or "application/octet-stream"

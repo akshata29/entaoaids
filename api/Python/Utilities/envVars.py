@@ -11,6 +11,27 @@ try:
     OpenAiDocConnStr = f"DefaultEndpointsProtocol=https;AccountName={OpenAiDocStorName};AccountKey={OpenAiDocStorKey};EndpointSuffix=core.windows.net"
     OpenAiDocContainer = os.environ['OpenAiDocContainer']
 
+    if "TenantId" in os.environ: 
+        TenantId = os.environ['TenantId']
+    else:
+        TenantId = ""
+
+    if "ClientId" in os.environ: 
+        ClientId = os.environ['ClientId']
+    else:
+        ClientId = ""
+
+    if "ClientSecret" in os.environ: 
+        ClientSecret = os.environ['ClientSecret']
+    else:
+        ClientSecret = ""
+
+    if "BlobAccountName" in os.environ: 
+        BlobAccountName = os.environ['BlobAccountName']
+    else:
+        BlobAccountName = ""
+
+
     if "KbIndexName" in os.environ: 
         KbIndexName = os.environ['KbIndexName']
     else:
