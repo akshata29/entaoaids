@@ -5,16 +5,10 @@ import { Checkbox, Panel, DefaultButton} from "@fluentui/react";
 import github from "../../assets/github.svg"
 
 import styles from "./Layout.module.css";
-import { SettingsButton } from "../../components/SettingsButton/SettingsButton";
 
 
 const Layout = () => {
     const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
-    const [showAdmin, setShowAdmin] = useState<boolean>(false);
-
-    const onShowAdmin = (_ev?: React.FormEvent<HTMLElement | HTMLInputElement>, checked?: boolean) => {
-        setShowAdmin(!!checked);
-    };
 
     return (
         <div className={styles.layout}>
@@ -35,15 +29,8 @@ const Layout = () => {
                                     Summarization
                                 </NavLink>
                             </li>
-                            {showAdmin && (
-                                 <li className={styles.headerNavLeftMargin}>
-                                 <NavLink to="/admin" className={({ isActive }) => (isActive ? styles.headerNavPageLinkActive : styles.headerNavPageLink)}>
-                                     Admin
-                                 </NavLink>
-                             </li>
-                            )}
                             <li className={styles.headerNavLeftMargin}>
-                                <a href="https://github.com/akshata29/chatpdf" target={"_blank"} title="Github repository link">
+                                <a href="https://github.com/akshata29/entaoaids" target={"_blank"} title="Github repository link">
                                     <img
                                         src={github}
                                         alt="Github logo"
@@ -54,31 +41,11 @@ const Layout = () => {
                                     />
                                 </a>
                             </li>
-                            <li className={styles.headerNavLeftMargin}>
-                                <SettingsButton className={styles.settingsButton} onClick={() => setIsConfigPanelOpen(!isConfigPanelOpen)} />
-                            </li>
                         </ul>
                     </nav>
                     <h4 className={styles.headerRightText}>Azure OpenAI</h4>
                 </div>
             </header>
-            <Panel
-                headerText="Configure Page Settings"
-                isOpen={isConfigPanelOpen}
-                isBlocking={false}
-                onDismiss={() => setIsConfigPanelOpen(false)}
-                closeButtonAriaLabel="Close"
-                onRenderFooterContent={() => <DefaultButton onClick={() => setIsConfigPanelOpen(false)}>Close</DefaultButton>}
-                isFooterAtBottom={true}
-            >
-                <br/>
-                <Checkbox
-                    className={styles.chatSettingsSeparator}
-                    checked={showAdmin}
-                    label="Display Admin Features"
-                    onChange={onShowAdmin}
-                />
-            </Panel>
             <Outlet />
         </div>
     );

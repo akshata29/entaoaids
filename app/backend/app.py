@@ -26,193 +26,6 @@ def formatNdJson(r):
     for data in r:
         yield json.dumps(data).replace("\n", "\\n") + "\n"
 
-@app.route("/getAllSessions", methods=["POST"])
-def getAllSessions():
-    indexType=request.json["indexType"]
-    feature=request.json["feature"]
-    type=request.json["type"]
-    
-    try:
-        CosmosEndPoint = os.environ.get("COSMOSENDPOINT")
-        CosmosKey = os.environ.get("COSMOSKEY")
-        CosmosDb = os.environ.get("COSMOSDATABASE")
-        CosmosContainer = os.environ.get("COSMOSCONTAINER")
-
-        cosmosClient = CosmosClient(url=CosmosEndPoint, credential=CosmosKey)
-        cosmosDb = cosmosClient.create_database_if_not_exists(id=CosmosDb)
-        cosmosKey = PartitionKey(path="/sessionId")
-        cosmosContainer = cosmosDb.create_container_if_not_exists(id=CosmosContainer, partition_key=cosmosKey, offer_throughput=400)
-
-        cosmosQuery = "SELECT c.sessionId, c.name, c.indexId FROM c WHERE c.type = @type and c.feature = @feature and c.indexType = @indexType"
-        params = [dict(name="@type", value=type), 
-                  dict(name="@feature", value=feature), 
-                  dict(name="@indexType", value=indexType)]
-        results = cosmosContainer.query_items(query=cosmosQuery, parameters=params, enable_cross_partition_query=True)
-        items = [item for item in results]
-        #output = json.dumps(items, indent=True)
-        return jsonify(items)
-    except Exception as e:
-        logging.exception("Exception in /getAllSessions")
-        return jsonify({"error": str(e)}), 500
-        
-@app.route("/getAllIndexSessions", methods=["POST"])
-def getAllIndexSessions():
-    indexType=request.json["indexType"]
-    indexNs=request.json["indexNs"]
-    feature=request.json["feature"]
-    type=request.json["type"]
-    
-    try:
-        CosmosEndPoint = os.environ.get("COSMOSENDPOINT")
-        CosmosKey = os.environ.get("COSMOSKEY")
-        CosmosDb = os.environ.get("COSMOSDATABASE")
-        CosmosContainer = os.environ.get("COSMOSCONTAINER")
-
-        cosmosClient = CosmosClient(url=CosmosEndPoint, credential=CosmosKey)
-        cosmosDb = cosmosClient.create_database_if_not_exists(id=CosmosDb)
-        cosmosKey = PartitionKey(path="/sessionId")
-        cosmosContainer = cosmosDb.create_container_if_not_exists(id=CosmosContainer, partition_key=cosmosKey, offer_throughput=400)
-
-        cosmosQuery = "SELECT c.sessionId, c.name FROM c WHERE c.type = @type and c.feature = @feature and c.indexType = @indexType and c.indexId = @indexNs"
-        params = [dict(name="@type", value=type), 
-                  dict(name="@feature", value=feature), 
-                  dict(name="@indexType", value=indexType), 
-                  dict(name="@indexNs", value=indexNs)]
-        results = cosmosContainer.query_items(query=cosmosQuery, parameters=params, enable_cross_partition_query=True)
-        items = [item for item in results]
-        #output = json.dumps(items, indent=True)
-        return jsonify(items)
-    except Exception as e:
-        logging.exception("Exception in /getAllIndexSessions")
-        return jsonify({"error": str(e)}), 500
-    
-@app.route("/getIndexSession", methods=["POST"])
-def getIndexSession():
-    indexType=request.json["indexType"]
-    indexNs=request.json["indexNs"]
-    sessionName=request.json["sessionName"]
-    
-    try:
-        CosmosEndPoint = os.environ.get("COSMOSENDPOINT")
-        CosmosKey = os.environ.get("COSMOSKEY")
-        CosmosDb = os.environ.get("COSMOSDATABASE")
-        CosmosContainer = os.environ.get("COSMOSCONTAINER")
-
-        cosmosClient = CosmosClient(url=CosmosEndPoint, credential=CosmosKey)
-        cosmosDb = cosmosClient.create_database_if_not_exists(id=CosmosDb)
-        cosmosKey = PartitionKey(path="/sessionId")
-        cosmosContainer = cosmosDb.create_container_if_not_exists(id=CosmosContainer, partition_key=cosmosKey, offer_throughput=400)
-
-        cosmosQuery = "SELECT c.id, c.type, c.sessionId, c.name, c.chainType, \
-         c.feature, c.indexId, c.IndexType, c.IndexName, c.llmModel, \
-          c.timestamp, c.tokenUsed, c.embeddingModelType FROM c WHERE c.name = @sessionName and c.indexType = @indexType and c.indexId = @indexNs"
-        params = [dict(name="@sessionName", value=sessionName), 
-                  dict(name="@indexType", value=indexType), 
-                  dict(name="@indexNs", value=indexNs)]
-        results = cosmosContainer.query_items(query=cosmosQuery, parameters=params, enable_cross_partition_query=True,
-                                              max_item_count=1)
-        sessions = [item for item in results]
-        return jsonify(sessions)
-    except Exception as e:
-        logging.exception("Exception in /getIndexSession")
-        return jsonify({"error": str(e)}), 500
-    
-@app.route("/deleteIndexSession", methods=["POST"])
-def deleteIndexSession():
-    indexType=request.json["indexType"]
-    indexNs=request.json["indexNs"]
-    sessionName=request.json["sessionName"]
-    
-    try:
-        CosmosEndPoint = os.environ.get("COSMOSENDPOINT")
-        CosmosKey = os.environ.get("COSMOSKEY")
-        CosmosDb = os.environ.get("COSMOSDATABASE")
-        CosmosContainer = os.environ.get("COSMOSCONTAINER")
-
-        cosmosClient = CosmosClient(url=CosmosEndPoint, credential=CosmosKey)
-        cosmosDb = cosmosClient.create_database_if_not_exists(id=CosmosDb)
-        cosmosKey = PartitionKey(path="/sessionId")
-        cosmosContainer = cosmosDb.create_container_if_not_exists(id=CosmosContainer, partition_key=cosmosKey, offer_throughput=400)
-
-        cosmosQuery = "SELECT c.sessionId FROM c WHERE c.name = @sessionName and c.indexType = @indexType and c.indexId = @indexNs"
-        params = [dict(name="@sessionName", value=sessionName), 
-                  dict(name="@indexType", value=indexType), 
-                  dict(name="@indexNs", value=indexNs)]
-        results = cosmosContainer.query_items(query=cosmosQuery, parameters=params, enable_cross_partition_query=True,
-                                              max_item_count=1)
-        sessions = [item for item in results]
-        sessionData = json.loads(json.dumps(sessions))[0]
-        cosmosAllDocQuery = "SELECT * FROM c WHERE c.sessionId = @sessionId"
-        params = [dict(name="@sessionId", value=sessionData['sessionId'])]
-        allDocs = cosmosContainer.query_items(query=cosmosAllDocQuery, parameters=params, enable_cross_partition_query=True)
-        for i in allDocs:
-            cosmosContainer.delete_item(i, partition_key=i["sessionId"])
-        
-        #deleteQuery = "SELECT c._self FROM c WHERE c.sessionId = '" + sessionData['sessionId'] + "'"
-        #result = cosmosContainer.scripts.execute_stored_procedure(sproc="bulkDeleteSproc",params=[deleteQuery], partition_key=cosmosKey)
-        #print(result)
-        
-        #cosmosContainer.delete_all_items_by_partition_key(sessionData['sessionId'])
-        return jsonify(sessions)
-    except Exception as e:
-        logging.exception("Exception in /deleteIndexSession")
-        return jsonify({"error": str(e)}), 500
-    
-@app.route("/renameIndexSession", methods=["POST"])
-def renameIndexSession():
-    oldSessionName=request.json["oldSessionName"]
-    newSessionName=request.json["newSessionName"]
-    
-    try:
-        CosmosEndPoint = os.environ.get("COSMOSENDPOINT")
-        CosmosKey = os.environ.get("COSMOSKEY")
-        CosmosDb = os.environ.get("COSMOSDATABASE")
-        CosmosContainer = os.environ.get("COSMOSCONTAINER")
-
-        cosmosClient = CosmosClient(url=CosmosEndPoint, credential=CosmosKey)
-        cosmosDb = cosmosClient.create_database_if_not_exists(id=CosmosDb)
-        cosmosKey = PartitionKey(path="/sessionId")
-        cosmosContainer = cosmosDb.create_container_if_not_exists(id=CosmosContainer, partition_key=cosmosKey, offer_throughput=400)
-
-        cosmosQuery = "SELECT * FROM c WHERE c.name = @sessionName and c.type = 'Session'"
-        params = [dict(name="@sessionName", value=oldSessionName)]
-        results = cosmosContainer.query_items(query=cosmosQuery, parameters=params, enable_cross_partition_query=True,
-                                              max_item_count=1)
-        sessions = [item for item in results]
-        sessionData = json.loads(json.dumps(sessions))[0]
-        #selfId = sessionData['_self']
-        sessionData['name'] = newSessionName
-        cosmosContainer.replace_item(item=sessionData, body=sessionData)
-        return jsonify(sessions)
-    except Exception as e:
-        logging.exception("Exception in /renameIndexSession")
-        return jsonify({"error": str(e)}), 500
-
-@app.route("/getIndexSessionDetail", methods=["POST"])
-def getIndexSessionDetail():
-    sessionId=request.json["sessionId"]
-    
-    try:
-        CosmosEndPoint = os.environ.get("COSMOSENDPOINT")
-        CosmosKey = os.environ.get("COSMOSKEY")
-        CosmosDb = os.environ.get("COSMOSDATABASE")
-        CosmosContainer = os.environ.get("COSMOSCONTAINER")
-
-        cosmosClient = CosmosClient(url=CosmosEndPoint, credential=CosmosKey)
-        cosmosDb = cosmosClient.create_database_if_not_exists(id=CosmosDb)
-        cosmosKey = PartitionKey(path="/sessionId")
-        cosmosContainer = cosmosDb.create_container_if_not_exists(id=CosmosContainer, partition_key=cosmosKey, offer_throughput=400)
-
-        cosmosQuery = "SELECT c.role, c.content FROM c WHERE c.sessionId = @sessionId and c.type = 'Message' ORDER by c._ts ASC"
-        params = [dict(name="@sessionId", value=sessionId)]
-        results = cosmosContainer.query_items(query=cosmosQuery, parameters=params, enable_cross_partition_query=True)
-        items = [item for item in results]
-        #output = json.dumps(items, indent=True)
-        return jsonify(items)
-    except Exception as e:
-        logging.exception("Exception in /getIndexSessionDetail")
-        return jsonify({"error": str(e)}), 500
-        
 @app.route("/verifyPassword", methods=["POST"])
 def verifyPassword():
     passType=request.json["passType"]
@@ -293,65 +106,7 @@ def refreshIndex():
     except Exception as e:
         logging.exception("Exception in /refreshIndex")
         return jsonify({"error": str(e)}), 500
-
-@app.route("/getDocumentList", methods=["GET"])
-def getDocumentList():
-   
-    try:
-        SearchService = os.environ.get("SEARCHSERVICE")
-        SearchKey = os.environ.get("SEARCHKEY")
-        searchClient = SearchClient(endpoint=f"https://{SearchService}.search.windows.net",
-        index_name="evaluatordocument",
-        credential=AzureKeyCredential(SearchKey))
-        try:
-            r = searchClient.search(  
-                search_text="",
-                select=["documentId", "documentName", "sourceFile"],
-                include_total_count=True
-            )
-            documentList = []
-            for document in r:
-                try:
-                    documentList.append({
-                        "documentId": document['documentId'],
-                        "documentName": document['documentName'],
-                        "sourceFile": document['sourceFile']
-                    })
-                except Exception as e:
-                    pass
-            return jsonify({"values" : documentList})
-        except Exception as e:
-            logging.exception("Exception in /getDocumentList")
-            return jsonify({"error": str(e)}), 500
-    except Exception as e:
-        logging.exception("Exception in /getDocumentList")
-        return jsonify({"error": str(e)}), 500
-    
-@app.route("/indexManagement", methods=["POST"])
-def indexManagement():
-   
-    try:
-        indexType=request.json["indexType"]
-        indexName=request.json["indexName"]
-        blobName=request.json["blobName"]
-        indexNs=request.json["indexNs"]
-        operation=request.json["operation"]    
-        postBody=request.json["postBody"]
-
-        headers = {'content-type': 'application/json'}
-        url = os.environ.get("INDEXMANAGEMENT_URL")
-
-        data = postBody
-        params = {'indexType': indexType, "indexName": indexName, "blobName": blobName , "indexNs": indexNs, "operation": operation}
-        resp = requests.post(url, params=params, data=json.dumps(data), headers=headers)
-        jsonDict = json.loads(resp.text)
-        #return json.dumps(jsonDict)
-        return jsonify(jsonDict)
-
-    except Exception as e:
-        logging.exception("Exception in /indexManagement")
-        return jsonify({"error": str(e)}), 500
-    
+        
 @app.route("/uploadFile", methods=["POST"])
 def uploadFile():
    
@@ -472,6 +227,7 @@ def processSummary():
     indexNs=request.json["indexNs"]
     indexType=request.json["indexType"]
     existingSummary=request.json["existingSummary"]
+    fullDocumentSummary=request.json["fullDocumentSummary"]
     postBody=request.json["postBody"]
    
     try:
@@ -479,34 +235,12 @@ def processSummary():
         url = os.environ.get("PROCESSSUMMARY_URL")
 
         data = postBody
-        params = { "indexNs": indexNs , "indexType": indexType, "existingSummary": existingSummary}
+        params = { "indexNs": indexNs , "indexType": indexType, "existingSummary": existingSummary, "fullDocumentSummary":fullDocumentSummary}
         resp = requests.post(url, params=params, data=json.dumps(data), headers=headers)
         jsonDict = json.loads(resp.text)
         return jsonify(jsonDict)
     except Exception as e:
         logging.exception("Exception in /processSummary")
-        return jsonify({"error": str(e)}), 500
-
-@app.route("/summarizer", methods=["POST"])
-def summarizer():
-    docType=request.json["docType"]
-    chainType=request.json["chainType"]
-    promptName=request.json["promptName"]
-    promptType=request.json["promptType"]
-    postBody=request.json["postBody"]
-     
-    try:
-        headers = {'content-type': 'application/json'}
-        url = os.environ.get("SUMMARIZER_URL")
-
-        data = postBody
-        params = {'docType': docType, "chainType": chainType, "promptName": promptName, "promptType": promptType}
-        resp = requests.post(url, params=params, data=json.dumps(data), headers=headers)
-        jsonDict = json.loads(resp.text)
-        #return json.dumps(jsonDict)
-        return jsonify(jsonDict)
-    except Exception as e:
-        logging.exception("Exception in /summarizer")
         return jsonify({"error": str(e)}), 500
     
 # Serve content files from blob storage from within the app to keep the example self-contained. 

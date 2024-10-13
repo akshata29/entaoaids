@@ -527,10 +527,6 @@
               "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightName')), '2020-02-02').InstrumentationKey]"
             },
             {
-              "name": "BLOB_CONNECTION_STRING",
-              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), '2022-05-01').keys[0].value)]"
-            },
-            {
               "name": "BLOB_CONTAINER_NAME",
               "value": "chatpdf"
             },
@@ -539,28 +535,8 @@
               "value": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/api/VerifyPassword?code=', listkeys(concat(resourceId('Microsoft.Web/sites', variables('funcAppName')), '/host/default'), '2018-11-01').functionKeys.default)]"
             },
             {
-              "name": "INDEXMANAGEMENT_URL",
-              "value": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/api/IndexManagement?code=', listkeys(concat(resourceId('Microsoft.Web/sites', variables('funcAppName')), '/host/default'), '2018-11-01').functionKeys.default)]"
-            },
-            {
-              "name": "CHAT_URL",
-              "value": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/api/ChatGpt?code=', listkeys(concat(resourceId('Microsoft.Web/sites', variables('funcAppName')), '/host/default'), '2018-11-01').functionKeys.default)]"
-            },
-            {
-              "name": "CHATSTREAM_URL",
-              "value": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/api/ChatGptStream?code=', listkeys(concat(resourceId('Microsoft.Web/sites', variables('funcAppName')), '/host/default'), '2018-11-01').functionKeys.default)]"
-            },
-            {
-              "name": "CHATGPT_URL",
-              "value": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/api/OpenChatGpt?code=', listkeys(concat(resourceId('Microsoft.Web/sites', variables('funcAppName')), '/host/default'), '2018-11-01').functionKeys.default)]"
-            },
-            {
               "name": "DOCGENERATOR_URL",
               "value": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/api/DocGenerator?code=', listkeys(concat(resourceId('Microsoft.Web/sites', variables('funcAppName')), '/host/default'), '2018-11-01').functionKeys.default)]"
-            },
-            {
-              "name": "QA_URL",
-              "value": "[concat('https://', variables('funcAppName'), '.azurewebsites.net/api/QuestionAnswering?code=', listkeys(concat(resourceId('Microsoft.Web/sites', variables('funcAppName')), '/host/default'), '2018-11-01').functionKeys.default)]"
             },
             {
               "name": "SPEECH_REGION",
@@ -577,26 +553,6 @@
             {
               "name": "SEARCHSERVICE",
               "value": "[variables('searchSvcName')]"
-            },
-            {
-              "name": "KBINDEXNAME",
-              "value": "aoaikb"
-            },
-            {
-              "name": "COSMOSENDPOINT",
-              "value": "[reference(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbName')), '2022-08-15').documentEndpoint]"
-            },
-            {
-              "name": "COSMOSKEY",
-              "value": "[listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbName')), '2022-08-15').primaryMasterKey]"
-            },
-            {
-              "name": "COSMOSDATABASE",
-              "value": "[variables('cosmosDb')]"
-            },
-            {
-              "name": "COSMOSCONTAINER",
-              "value": "[variables('cosmosContainer')]"
             },
             {
               "name": "OpenAiChat",

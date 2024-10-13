@@ -1,5 +1,4 @@
-import { AskRequest, AskResponse, ChatRequest, ChatResponse, SpeechTokenResponse, SqlResponse,
-  EvalResponse, UserInfo} from "./models";
+import { AskRequest, AskResponse, ChatResponse,  UserInfo} from "./models";
 import { Any } from "@react-spring/web";
 
 export async function getUserInfo(): Promise<UserInfo[]> {
@@ -13,132 +12,6 @@ export async function getUserInfo(): Promise<UserInfo[]> {
   return payload;
 }
 
-export async function getAllSessions(indexType:string, feature:string, type:string): Promise<Any> {
-  const response = await fetch('/getAllSessions' , {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        indexType:indexType,
-        feature:feature,
-        type:type,
-      })
-  });
-
-  const parsedResponse: Any = await response.json();
-  if (response.status > 299 || !response.ok) {
-      throw Error("Unknown error");
-  }
-  return parsedResponse;
-}
-export async function getAllIndexSessions(indexNs: string, indexType:string, feature:string, type:string): Promise<Any> {
-  const response = await fetch('/getAllIndexSessions' , {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        indexType:indexType,
-        indexNs: indexNs,
-        feature:feature,
-        type:type,
-      })
-  });
-
-  const parsedResponse: Any = await response.json();
-  if (response.status > 299 || !response.ok) {
-      throw Error("Unknown error");
-  }
-  return parsedResponse;
-}
-export async function getIndexSession(indexNs: string, indexType:string, sessionName:string): Promise<Any> {
-  const response = await fetch('/getIndexSession' , {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        indexType:indexType,
-        indexNs: indexNs,
-        sessionName:sessionName
-      })
-  });
-
-  const parsedResponse: any = await response.json();
-  if (response.status > 299 || !response.ok) {
-      throw Error("Unknown error");
-  }
-  return parsedResponse;
-}
-export async function deleteIndexSession(indexNs: string, indexType:string, sessionName:string): Promise<String> {
-  const response = await fetch('/deleteIndexSession' , {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        indexType:indexType,
-        indexNs: indexNs,
-        sessionName:sessionName
-      })
-  });
-
-  const parsedResponse: any = await response.json();
-  if (response.status > 299 || !response.ok) {
-      throw Error("Unknown error");
-  }
-  return parsedResponse;
-}
-export async function getDocumentList(): Promise<Any> {
-  const response = await fetch('/getDocumentList' , {
-      method: "GET",
-      headers: {
-          "Content-Type": "application/json"
-      },
-  });
-
-  const parsedResponse: any = await response.json();
-  if (response.status > 299 || !response.ok) {
-      throw Error("Unknown error");
-  }
-  return parsedResponse;
-}
-export async function renameIndexSession(oldSessionName: string, newSessionName:string): Promise<String> {
-  const response = await fetch('/renameIndexSession' , {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        oldSessionName:oldSessionName,
-        newSessionName: newSessionName
-      })
-  });
-
-  const parsedResponse: any = await response.json();
-  if (response.status > 299 || !response.ok) {
-      throw Error("Unknown error");
-  }
-  return parsedResponse;
-}
-export async function getIndexSessionDetail(sessionId: string): Promise<Any> {
-  const response = await fetch('/getIndexSessionDetail' , {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        sessionId:sessionId,
-      })
-  });
-
-  const parsedResponse: Any = await response.json();
-  if (response.status > 299 || !response.ok) {
-      throw Error("Unknown error");
-  }
-  return parsedResponse;
-}
 export async function refreshIndex() : Promise<any> {
   
   const response = await fetch('/refreshIndex', {
@@ -259,7 +132,7 @@ export async function processDoc(indexType: string, loadType : string, multiple:
   
   // return "Success";
 }
-export async function processSummary(indexNs: string, indexType: string, existingSummary : string, options : AskRequest) : Promise<AskResponse> {
+export async function processSummary(indexNs: string, indexType: string, existingSummary : string, fullDocumentSummary : boolean, options : AskRequest) : Promise<AskResponse> {
   const response = await fetch('/processSummary', {
     method: "POST",
     headers: {
@@ -269,6 +142,7 @@ export async function processSummary(indexNs: string, indexType: string, existin
       indexNs:indexNs,
       indexType: indexType,
       existingSummary: existingSummary,
+      fullDocumentSummary : fullDocumentSummary,
       postBody: {
         values: [
           {
@@ -298,84 +172,6 @@ export async function processSummary(indexNs: string, indexType: string, existin
       throw Error("Unknown error");
   }
   return parsedResponse.values[0].data
-}
-export async function summarizer(options: AskRequest, requestText: string, promptType:string, promptName: string, docType: string, 
-  chainType:string, embeddingModelType:string): Promise<string> {
-  const response = await fetch('/summarizer' , {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        docType: docType,
-        chainType: chainType,
-        promptType: promptType,
-        promptName: promptName,
-        postBody: {
-          values: [
-            {
-              recordId: 0,
-              data: {
-                text: requestText,
-                overrides: {
-                  temperature: options.overrides?.temperature,
-                  tokenLength: options.overrides?.tokenLength,
-                  embeddingModelType : embeddingModelType,
-                  useInternet:options.overrides?.useInternet,
-                }
-              }
-            }
-          ]
-        }
-    })
-  });
-
-  const parsedResponse: any = await response.json();
-  if (response.status > 299 || !response.ok) {
-    throw Error("Unknown error");
-  }
-  return parsedResponse.values[0].data.text
-}
-export async function indexManagement(indexType:string, indexName:string, blobName:string, indexNs:string,
-  operation:string) : Promise<string> {
-  const response = await fetch('/indexManagement', {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      indexType:indexType,
-      blobName:blobName,
-      indexNs:indexNs,
-      indexName:indexName,
-      operation:operation,
-      postBody: {
-        values: [
-          {
-            recordId: 0,
-            data: {
-              text: ''
-            }
-          }
-        ]
-      }
-    })
-  });
-
-  const parsedResponse: ChatResponse = await response.json();
-  if (response.status > 299 || !response.ok) {
-      return "Error";
-  } else {
-    if (parsedResponse.values[0].data.error) {
-      return parsedResponse.values[0].data.error;
-    }
-    return 'Success';
-  }
-  // if (response.status > 299 || !response.ok) {
-  //   return "Error";
-  // }
-  
-  // return "Success";
 }
 export async function verifyPassword(passType:string, password: string): Promise<string> {
   const response = await fetch('/verifyPassword' , {
@@ -408,38 +204,6 @@ export async function verifyPassword(passType:string, password: string): Promise
       }
       return 'Success';
     }
-}
-export async function getSpeechToken(): Promise<SpeechTokenResponse> {
-  const response = await fetch('/speechToken' , {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json"
-      },
-  });
-
-  const parsedResponse: SpeechTokenResponse = await response.json();
-  if (response.status > 299 || !response.ok) {
-    throw Error("Unknown error");
-  }
-  return parsedResponse
-}
-export async function getSpeechApi(text: string): Promise<string|null> {
-  return await fetch("/speech", {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-          text: text
-      })
-  }).then((response) => { 
-      if(response.status == 200){
-          return response.blob();
-      } else {
-          console.error("Unable to get speech synthesis.");
-          return null;
-      }
-  }).then((blob) => blob ? URL.createObjectURL(blob) : null);
 }
 export function getCitationFilePath(citation: string): string {
     return `/content/${citation}`;

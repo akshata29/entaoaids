@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Spinner, PrimaryButton, DefaultButton, TextField } from "@fluentui/react";
+import { Checkbox, Spinner, PrimaryButton, DefaultButton, TextField } from "@fluentui/react";
 import { makeStyles } from "@fluentui/react-components";
 
 import { Dropdown, DropdownMenuItemType, IDropdownStyles, IDropdownOption } from '@fluentui/react/lib/Dropdown';
@@ -31,6 +31,8 @@ const Summary = () => {
   const [customTopic, setCustomTopic] = useState<string>("");
   const [selectedDeploymentType, setSelectedDeploymentType] = useState<IDropdownOption>();
   const [selectedChunkSize, setSelectedChunkSize] = useState<string>()
+  const [fullDocumentSummary, setFullDocumentSummary] = useState<boolean>(false);
+
 
   const dropdownShortStyles: Partial<IDropdownStyles> = { dropdown: { width: 200 } };
 
@@ -48,6 +50,10 @@ const Summary = () => {
   ]
 
   const summaryTopicOptions = [
+    {
+      key: 'FullDocument',
+      text: 'Full Document'
+    },
     {
       key: 'Strengths',
       text: 'Strengths'
@@ -208,6 +214,10 @@ const Summary = () => {
     //getDocumentRuns(String(item?.key))
   };
 
+  const onFullDocumentSummaryChanged = (_ev?: React.FormEvent<HTMLElement | HTMLInputElement>, checked?: boolean) => {
+    setFullDocumentSummary(!!checked);
+  };
+
   const onSummarizationTopicChanged = (event?: React.FormEvent<HTMLDivElement>, item?: IDropdownOption): void => {
     if (item) {
         setSelectedSummaryTopicItem(
@@ -353,7 +363,7 @@ const Summary = () => {
             }
         };
         setIsLoading(true);
-        await processSummary(String(selectedItem?.key), String(selectedIndex), "true", request)
+        await processSummary(String(selectedItem?.key), String(selectedIndex), "true", fullDocumentSummary, request)
         .then(async (response: { answer: any; }) => {
                 const answer = JSON.parse(JSON.stringify(response.answer));
                   const tQuestions = []
@@ -409,7 +419,7 @@ const Summary = () => {
             }
         };
         setIsLoading(true);
-        await processSummary(String(selectedItem?.key), String(selectedIndex), "false", request)
+        await processSummary(String(selectedItem?.key), String(selectedIndex), "false", fullDocumentSummary,  request)
         .then(async (response: { answer: any; }) => {
                 const answer = JSON.parse(JSON.stringify(response.answer));
                   const tQuestions = []
@@ -556,6 +566,12 @@ const Summary = () => {
                     styles={dropdownStyles}
                 />
                 &nbsp; */}
+                <Checkbox
+                    checked={fullDocumentSummary}
+                    label="Full Document"
+                    onChange={onFullDocumentSummaryChanged}
+                />
+                &nbsp;&nbsp;&nbsp;&nbsp;
                 <Label>Summarization Topics</Label>
                 &nbsp;
                 <Dropdown

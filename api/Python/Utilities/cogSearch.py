@@ -291,6 +291,23 @@ def performCogSearch(indexType, embeddingModelType, question, indexName, k, retu
 
     return None
 
+def performFullCogSearch(indexName, returnFields=["content"] ):
+    searchClient = SearchClient(endpoint=f"https://{SearchService}.search.windows.net",
+        index_name=indexName,
+        credential=AzureKeyCredential(SearchKey))
+    try:
+        r = searchClient.search('*', 
+                    filter=None,
+                    query_type=QueryType.SEMANTIC, 
+                    semantic_configuration_name="mySemanticConfig", 
+                    top=1000)
+
+        return r
+    except Exception as e:
+        logging.info(e)
+
+    return None
+
 def performSummaryQaCogSearch(indexType, embeddingModelType, question, indexName, k, returnFields=["id", "content", "sourcefile"] ):
     searchClient = SearchClient(endpoint=f"https://{SearchService}.search.windows.net",
         index_name=indexName,

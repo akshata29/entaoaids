@@ -9,7 +9,7 @@ from Utilities.envVars import *
 #from langchain.document_loaders import JSONLoader
 from langchain_openai import AzureChatOpenAI
 from langchain_openai import ChatOpenAI
-from Utilities.cogSearch import findSummaryInIndex, performCogSearch, mergeDocs, createProspectusSummary, findTopicSummaryInIndex
+from Utilities.cogSearch import findSummaryInIndex, performCogSearch, mergeDocs, createProspectusSummary, findTopicSummaryInIndex, performFullCogSearch
 from langchain.docstore.document import Document
 import uuid
 from langchain_openai import OpenAIEmbeddings
@@ -66,7 +66,7 @@ def get_chunks(full_text, OVERLAP=True, DEBUG=False):
     
     #don't chunk tiny texts
     if token_count <= min_chunk_length:
-        if DEBUG: print("Text is too small to be chunked further")
+        if DEBUG: logging.info("Text is too small to be chunked further")
         return [full_text]
         
     #if the text is shorter, use smaller chunks
@@ -139,7 +139,7 @@ def ask_azure_openai(client, prompt_text, DEBUG=False):
             response = client.chat.completions.create(
                 messages=messages,
                 temperature=0,
-                max_tokens=500,
+                max_tokens=3500,
                 model=OpenAiChat,
             )
             
@@ -152,8 +152,8 @@ def ask_azure_openai(client, prompt_text, DEBUG=False):
             # Compute metrics
             request_time = round(time.time() - start_time, 2)
             if DEBUG:
-                print("Received:", results)
-                print("request time (sec):", request_time)
+                logging.info("Received:", results)
+                logging.info("request time (sec):", request_time)
 
             total_tokens = count_tokens(prompt_text + raw_results)  # Assuming you have a count_tokens function
             output_tokens = count_tokens(raw_results)
@@ -161,10 +161,10 @@ def ask_azure_openai(client, prompt_text, DEBUG=False):
             break
 
         except Exception as e:
-            print(f"Error with Azure OpenAI API call: {str(e)}")
+            logging.info(f"Error with Azure OpenAI API call: {str(e)}")
             attempt += 1
             if attempt > MAX_ATTEMPTS:
-                print("Max attempts reached!")
+                logging.info("Max attempts reached!")
                 results = str(e)
                 request_time = -1
                 total_tokens = -1
@@ -187,7 +187,7 @@ def thread_request(client, q, result):
             result[work[0]] = data          #Store data back at correct index
         except Exception as e:
             error_time = time.time()
-            print('Error with prompt!',str(e))
+            logging.info('Error with prompt!',str(e))
             result[work[0]] = (work[1],str(e),count_tokens(work[1]),0,round(error_time-thread_start_time,2),0,thread_start_time)
         #signal to the queue that task has been processed
         q.task_done()
@@ -195,7 +195,7 @@ def thread_request(client, q, result):
 
 def ask_aoai_threaded(client, prompts,DEBUG=False):
     '''
-    Call ask_claude, but multi-threaded.
+    Call ask_azure_openai, but multi-threaded.
     Returns a dict of the prompts and responces.
     '''
     q = Queue(maxsize=0)
@@ -210,7 +210,7 @@ def ask_aoai_threaded(client, prompts,DEBUG=False):
         
     #Starting worker threads on queue processing
     for i in range(num_theads):
-        #print('Starting thread ', i)
+        #logging.info('Starting thread ', i)
         worker = Thread(target=thread_request, args=(client, q,results))
         worker.setDaemon(True)    #setting threads as "daemon" allows main program to 
                                   #exit eventually even if these dont finish 
@@ -220,7 +220,7 @@ def ask_aoai_threaded(client, prompts,DEBUG=False):
     #now we wait until the queue has been processed
     q.join()
 
-    if DEBUG:print('All tasks completed.')
+    if DEBUG:logging.info('All tasks completed.')
     return results
 
 def get_prompt(text,prompt_type,format_type, manual_guidance, style_guide, docs_description=""):
@@ -358,7 +358,7 @@ def get_prompt(text,prompt_type,format_type, manual_guidance, style_guide, docs_
         
     #TBD
     style_guide = ""
-    #print (prompt_template.replace("{{GUIDANCE_1}}",guidance_1).replace("{{GUIDANCE_2}}",guidance_2).replace("{{GUIDANCE_3}}",guidance_3).replace("{{STYLE}}",style_guide).replace("{{REQUEST}}",prompt_type).replace("{{FORMAT}}",format_type))
+    #logging.info (prompt_template.replace("{{GUIDANCE_1}}",guidance_1).replace("{{GUIDANCE_2}}",guidance_2).replace("{{GUIDANCE_3}}",guidance_3).replace("{{STYLE}}",style_guide).replace("{{REQUEST}}",prompt_type).replace("{{FORMAT}}",format_type))
     final_prompt = prompt_template.replace("{{TEXT}}",text).replace("{{GUIDANCE_1}}",guidance_1).replace("{{GUIDANCE_2}}",guidance_2).replace("{{GUIDANCE_3}}",guidance_3).replace("{{STYLE}}",style_guide).replace("{{REQUEST}}",prompt_type).replace("{{FORMAT}}",format_type)
     return final_prompt
 
@@ -373,7 +373,7 @@ def generate_summary_from_chunks(client, chunks, prompt_options,DEBUG=False, chu
         partial_summaries_prompts = []
         partial_summaries_prompt2chunk = {}
         for x,chunk in enumerate(chunks):
-            #if DEBUG: print ("Working on chunk",x+1,end = '')
+            #if DEBUG: logging.info ("Working on chunk",x+1,end = '')
             start_chunk_time = time.time()
             #note that partial summaries are always done in list format to maximize information captured.
             custom_prompt = get_prompt(chunk,prompt_options['prompt_type'],'list', prompt_options['manual_guidance'], prompt_options['style_guide'])
@@ -386,14 +386,14 @@ def generate_summary_from_chunks(client, chunks, prompt_options,DEBUG=False, chu
             partial_summaries[partial_summaries_prompt2chunk[prompt_text]] = results
 
         if DEBUG: 
-            print ("Partial summary chunks done!")
-            print ("Creating joint summary...")
+            logging.info ("Partial summary chunks done!")
+            logging.info ("Creating joint summary...")
     else:
         for chunk in chunks:
             partial_summaries[chunk] = chunk
         if DEBUG: 
-            print ("Summarized chunks detected!")
-            print ("Creating joint summary...")
+            logging.info ("Summarized chunks detected!")
+            logging.info ("Creating joint summary...")
             
     summaries_list = []
     summaries_list_token_count = 0
@@ -401,7 +401,7 @@ def generate_summary_from_chunks(client, chunks, prompt_options,DEBUG=False, chu
         summaries_list.append(partial_summaries[chunk]) 
         summaries_list_token_count+=count_tokens(partial_summaries[chunk])
         
-    if DEBUG: print("Chunk summaries token count:",summaries_list_token_count)
+    if DEBUG: logging.info("Chunk summaries token count:",summaries_list_token_count)
     
     #check to see if the joint summary is too long.  If it is, recursivly itterate down.
     #we do this, rather than chunking again, so that summaries are not split.
@@ -410,7 +410,7 @@ def generate_summary_from_chunks(client, chunks, prompt_options,DEBUG=False, chu
     recombine_token_target = 3000
     #summaries_list_token_count = recombine_token_target+1 #set this to target+1 so that we do at least one recombonation for shorter documents.
     while summaries_list_token_count>recombine_token_target:
-        if DEBUG: print("Starting reduction loop to merge chunks.  Total token count is %s"%summaries_list_token_count)
+        if DEBUG: logging.info("Starting reduction loop to merge chunks.  Total token count is %s"%summaries_list_token_count)
         new_summaries_list = []
         summaries_list_token_count = 0
         temp_summary_group = []
@@ -419,7 +419,7 @@ def generate_summary_from_chunks(client, chunks, prompt_options,DEBUG=False, chu
             if temp_summary_group_token_length + count_tokens(summary) > recombine_token_target:
                 #the next summary added would push us over the edge, so summarize the current list, and then add it.
                 #note that partial summaries are always done in list format to maximize information captured.
-                if DEBUG: print("Reducing %s partial summaries into one..."%(len(temp_summary_group)))
+                if DEBUG: logging.info("Reducing %s partial summaries into one..."%(len(temp_summary_group)))
                 custom_prompt = get_prompt(temp_summary_group,"merge_summaries","list", prompt_options['manual_guidance'], prompt_options['style_guide'])
                 temp_summary = ask_azure_openai(client, custom_prompt,DEBUG=False)[1]
                 new_summaries_list.append(temp_summary)
@@ -432,19 +432,19 @@ def generate_summary_from_chunks(client, chunks, prompt_options,DEBUG=False, chu
         
         #summarize whever extra summaries are still in the temp list
         if len(temp_summary_group)>1:
-            if DEBUG: print("Starting final reduction of %s partial summaries into one..."%(len(temp_summary_group)))
+            if DEBUG: logging.info("Starting final reduction of %s partial summaries into one..."%(len(temp_summary_group)))
             custom_prompt = get_prompt(temp_summary_group,"merge_summaries","list", prompt_options['manual_guidance'], prompt_options['style_guide'])
             temp_summary = ask_azure_openai(client, custom_prompt,DEBUG=False)[1]
             new_summaries_list.append(temp_summary)
             summaries_list_token_count+= count_tokens(temp_summary)
         elif len(temp_summary_group)==1:
-            if DEBUG: print("Tacking on an extra partial summary")
+            if DEBUG: logging.info("Tacking on an extra partial summary")
             new_summaries_list.append(temp_summary_group[0])
             summaries_list_token_count+= count_tokens(temp_summary_group[0])
             
         summaries_list = new_summaries_list
         
-    if DEBUG: print ("Final merge of summary chunks, merging %s summaries."%(len(summaries_list)))
+    if DEBUG: logging.info ("Final merge of summary chunks, merging %s summaries."%(len(summaries_list)))
     custom_prompt = get_prompt(summaries_list,"merge_summaries",prompt_options['format_type'], prompt_options['manual_guidance'], prompt_options['style_guide'])
     full_summary = ask_azure_openai(client, custom_prompt,DEBUG=False)[1]
     #full_summary_prompt = get_prompt("/n".join(summaries_list),prompt_options['prompt_type'],prompt_options['format_type'], prompt_options['manual_guidance'], prompt_options['style_guide'])
@@ -468,28 +468,28 @@ def generate_single_doc_summary(client, full_text, prompt_options,AUTO_REFINE=Tr
         
     if DEBUG:
         if prompt_options['prompt_type'] == "answers":
-            print ("Generating answers using %s chunks."%(len(chunks)))
+            logging.info ("Generating answers using %s chunks."%(len(chunks)))
         else:
-            print ("Generating a new combined summary for %s chunks."%(len(chunks)))
+            logging.info ("Generating a new combined summary for %s chunks."%(len(chunks)))
         if ALREADY_CHUNKED_AND_SUMMED:
-            print ("Input has already been chunked and summarized, skipping initial chunking.")
+            logging.info ("Input has already been chunked and summarized, skipping initial chunking.")
         
             
     first_summary = generate_summary_from_chunks(client, chunks,prompt_options,DEBUG=DEBUG, chunks_already_summarized=ALREADY_CHUNKED_AND_SUMMED)
     
     if DEBUG and AUTO_REFINE: 
-        print ("First summary:")
-        print (first_summary)
+        logging.info ("First summary:")
+        logging.info (first_summary)
         
     if AUTO_REFINE: 
-        if DEBUG: print ("Asking the LLM to find weaknesses in this summary...")
+        if DEBUG: logging.info ("Asking the LLM to find weaknesses in this summary...")
         #now that we have a rough summary, let's grab some questions about it.
         questions_prompt = get_prompt(first_summary,"interrogate","list", "", "")
         questions_list = ask_azure_openai(client, questions_prompt,DEBUG=False)[1]
 
         if DEBUG: 
-            print ("Questions from the LLM:")
-            print (questions_list)
+            logging.info ("Questions from the LLM:")
+            logging.info (questions_list)
             
         original_guidance = prompt_options['manual_guidance']
         original_prompt_type = prompt_options['prompt_type']
@@ -497,9 +497,9 @@ def generate_single_doc_summary(client, full_text, prompt_options,AUTO_REFINE=Tr
         prompt_options['prompt_type'] = "answers"
         add_details = generate_single_doc_summary(full_text, prompt_options,AUTO_REFINE=False, DEBUG=DEBUG, ALREADY_CHUNKED_AND_SUMMED=ALREADY_CHUNKED_AND_SUMMED)
         if DEBUG: 
-            print("Additional Details:")
-            print (add_details)
-            print("Merging details into original summary...")
+            logging.info("Additional Details:")
+            logging.info (add_details)
+            logging.info("Merging details into original summary...")
         
         prompt_options['manual_guidance'] = original_guidance + add_details
         prompt_options['prompt_type'] = "merge_answers"
@@ -538,12 +538,12 @@ def generate_multiple_docs_summary(client, docs, questions, docs_description, DE
         for x,doc in enumerate(docs):
             if x>max_docs_to_scan:break#limit for testing
             
-            #print ("Asking the LLM to find extract answers from this doc:",doc)
+            #logging.info ("Asking the LLM to find extract answers from this doc:",doc)
             questions_prompt = get_prompt(docs[doc],"reporter","list", question, "",docs_description)
             prompt2quetion_doc[questions_prompt] = (question,doc) 
             prompts.append(questions_prompt)
         
-    if DEBUG:print("Starting %s worker threads."%len(prompts))
+    if DEBUG:logging.info("Starting %s worker threads."%len(prompts))
     prompts_answers = ask_aoai_threaded(client, prompts,DEBUG=False)
     
     for question in questions:
@@ -555,7 +555,7 @@ def generate_multiple_docs_summary(client, docs, questions, docs_description, DE
         
     
     current_answer_count = len(docs)
-    if DEBUG: print("All documents have been read.  Reducing answers into the final summary...")
+    if DEBUG: logging.info("All documents have been read.  Reducing answers into the final summary...")
     #reduce this down to 5 or less docs for the final summary by combining the individual answers.
     while current_answer_count > 5:
         #summarize the answers
@@ -563,16 +563,16 @@ def generate_multiple_docs_summary(client, docs, questions, docs_description, DE
         prompts2question = {}
         
         max_docs_to_scan = max(min(current_answer_count,8),3)
-        if DEBUG: print("Combining %s chunks.  (Currently there are %s answers to each question.)"%(max_docs_to_scan,current_answer_count))
+        if DEBUG: logging.info("Combining %s chunks.  (Currently there are %s answers to each question.)"%(max_docs_to_scan,current_answer_count))
         for question in questions:
-            #print ("Asking the LLM to summarize answers for this question:",question)
+            #logging.info ("Asking the LLM to summarize answers for this question:",question)
             #You want chunks of roughly 2K tokens
             for partial_chunks in grab_set_chunks(answers[question],max_docs_to_scan):
                 questions_prompt = get_prompt(partial_chunks,"reporter_summary","list", question, " in less than 1000 tokens")
                 prompts.append(questions_prompt)
                 prompts2question[questions_prompt] = question
         
-        if DEBUG:print("Starting %s worker threads."%len(prompts))
+        if DEBUG:logging.info("Starting %s worker threads."%len(prompts))
         prompts_answers = ask_aoai_threaded(client, prompts,DEBUG=False)
         
         for question in questions:
@@ -582,17 +582,17 @@ def generate_multiple_docs_summary(client, docs, questions, docs_description, DE
 
         current_answer_count = len(answers[questions[0]])
         
-    if DEBUG: print("Creating the final summary for each question.")
+    if DEBUG: logging.info("Creating the final summary for each question.")
     #write the final article:
     prompts = []
     prompts2question = {}
     for question in questions:
-        #print ("Asking the LLM to finalize the answer for this question:",question)
+        #logging.info ("Asking the LLM to finalize the answer for this question:",question)
         questions_prompt = get_prompt(answers[question],"reporter_final","narrative", question, "")
         prompts.append(questions_prompt)
         prompts2question[questions_prompt] = question
 
-    if DEBUG:print("Starting %s worker threads."%len(prompts))
+    if DEBUG:logging.info("Starting %s worker threads."%len(prompts))
     prompts_answers = ask_aoai_threaded(client, prompts,DEBUG=False)
     
     answers = {}
@@ -635,6 +635,7 @@ def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
         indexNs = req.params.get('indexNs')
         indexType = req.params.get('indexType')
         existingSummary = req.params.get('existingSummary')
+        fullDocumentSummary = req.params.get('fullDocumentSummary')
         logging.info(f'indexNs: {indexNs}')
         logging.info(f'indexType: {indexType}')
         body = json.dumps(req.get_json())
@@ -645,7 +646,7 @@ def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
         )
 
     if body:
-        result = ComposeResponse(indexNs, indexType, existingSummary, body)
+        result = ComposeResponse(indexNs, indexType, existingSummary, fullDocumentSummary, body)
         return func.HttpResponse(result, mimetype="application/json")
     else:
         return func.HttpResponse(
@@ -653,7 +654,7 @@ def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
              status_code=400
         )
 
-def ComposeResponse(indexNs, indexType, existingSummary, jsonData):
+def ComposeResponse(indexNs, indexType, existingSummary, fullDocumentSummary, jsonData):
     values = json.loads(jsonData)['values']
 
     logging.info("Calling Compose Response")
@@ -662,7 +663,7 @@ def ComposeResponse(indexNs, indexType, existingSummary, jsonData):
     results["values"] = []
 
     for value in values:
-        outputRecord = TransformValue(indexNs, indexType, existingSummary, value)
+        outputRecord = TransformValue(indexNs, indexType, existingSummary, fullDocumentSummary, value)
         if outputRecord != None:
             results["values"].append(outputRecord)
     return json.dumps(results, ensure_ascii=False)
@@ -758,18 +759,27 @@ def stuff_it_summary(llm, doc):
 def summarizeTopic(llm, client, query, embeddingModelType, indexNs, indexType, topK):
     if indexType == 'cogsearchvs':
         try:
-            r = performCogSearch(indexType, embeddingModelType, query, indexNs, topK, returnFields=["id", "content", "metadata"] )          
-            if r == None:
-                resultsDoc = [Document(page_content="No results found")]
-            else :
-                resultsDoc = [
-                        Document(page_content=doc['content'], metadata={"id": doc['id']})
-                        for doc in r
-                        ]
-            logging.info(f"Found {len(resultsDoc)} Cog Search results")
-
-            docContent = ' '.join([doc.page_content for doc in resultsDoc])
-    
+            if query == "FullDocument":
+                r = performFullCogSearch(indexNs)          
+                if r == None:
+                    docContent = "No results found"
+                else :
+                    docContent = ' '.join([doc['content'] for doc in r])
+            else:
+                r = performCogSearch(indexType, embeddingModelType, query, indexNs, topK, returnFields=["id", "content", "metadata"] )          
+                # if r == None:
+                #     resultsDoc = [Document(page_content="No results found")]
+                # else :
+                #     resultsDoc = [
+                #             Document(page_content=doc['content'], metadata={"id": doc['id']})
+                #             for doc in r
+                #             ]
+                # logging.info(f"Found {len(resultsDoc)} Cog Search results")
+                if r == None:
+                    docContent = "No results found"
+                else :
+                    docContent = ' '.join([doc['content'] for doc in r])
+        
             if len(docContent) == 0:
                 return "I don't know"
             else:
@@ -788,7 +798,7 @@ def summarizeTopic(llm, client, query, embeddingModelType, indexNs, indexType, t
             return "I don't know"
 
 def processTopicSummary(llm, client, fileName, indexNs, indexType, prospectusSummaryIndexName, embeddings, embeddingModelType, selectedTopics, 
-                        summaryPromptTemplate, topK, existingSummary):
+                        summaryPromptTemplate, topK, existingSummary, fullDocumentSummary):
     # r = findFileInIndex(SearchService, SearchKey, prospectusIndexName, fileName)
     # if r.get_count() == 0:
     #     rawDocs = blobLoad(OpenAiDocConnStr, OpenAiDocContainer, fileName)
@@ -800,6 +810,9 @@ def processTopicSummary(llm, client, fileName, indexNs, indexType, prospectusSum
     #                    OpenAiEmbedding, fileName, prospectusIndexName, docs)
     # else:
     #     logging.info('Found existing data')
+    if fullDocumentSummary:
+        selectedTopics.append("FullDocument")
+
     createProspectusSummary(prospectusSummaryIndexName)
     topicSummary = []
     logging.info(f"Existing Summary: {existingSummary}")
@@ -845,14 +858,14 @@ def processTopicSummary(llm, client, fileName, indexNs, indexType, prospectusSum
         mergeDocs(SearchService, SearchKey, prospectusSummaryIndexName, topicSummary)
     return topicSummary
 
-def summarizeTopics(indexNs, indexType, existingSummary, overrides):
+def summarizeTopics(indexNs, indexType, existingSummary, fullDocumentSummary, overrides):
     prospectusSummaryIndexName = 'summary'
 
     embeddingModelType = overrides.get("embeddingModelType") or 'azureopenai'
     selectedTopics = overrides.get("topics") or []
     summaryPromptTemplate = overrides.get("promptTemplate") or ''
     temperature = overrides.get("temperature") or 0.3
-    tokenLength = overrides.get("tokenLength") or 1500
+    tokenLength = overrides.get("tokenLength") or 3500
     fileName = overrides.get("fileName") or ''
     topK = overrides.get("top") or 3
 
@@ -884,7 +897,7 @@ def summarizeTopics(indexNs, indexType, existingSummary, overrides):
                         azure_deployment=OpenAiChat,
                         temperature=0.3,
                         api_key=OpenAiKey,
-                        max_tokens=500)
+                        max_tokens=3500)
         logging.info("LLM Setup done")
         embeddings = AzureOpenAIEmbeddings(azure_endpoint=OpenAiEndPoint, azure_deployment=OpenAiEmbedding, api_key=OpenAiKey, openai_api_type="azure")
         client = AzureOpenAI(
@@ -908,13 +921,13 @@ def summarizeTopics(indexNs, indexType, existingSummary, overrides):
 
 
     summaryTopicData = processTopicSummary(llm, client, fileName, indexNs, indexType, prospectusSummaryIndexName, embeddings, embeddingModelType, 
-                            selectedTopics, summaryPromptTemplate, topK, existingSummary)
+                            selectedTopics, summaryPromptTemplate, topK, existingSummary, fullDocumentSummary)
     outputFinalAnswer = {"data_points": '', "answer": summaryTopicData, 
                     "thoughts": '',
                         "sources": '', "nextQuestions": '', "error": ""}
     return outputFinalAnswer
 
-def TransformValue(indexNs, indexType, existingSummary, record):
+def TransformValue(indexNs, indexType, existingSummary, fullDocumentSummary, record):
     logging.info("Calling Transform Value")
     try:
         recordId = record['recordId']
@@ -950,7 +963,7 @@ def TransformValue(indexNs, indexType, existingSummary, record):
         # Getting the items from the values/data/text
         value = data['text']
         overrides = data['overrides']
-        summaryResponse = summarizeTopics(indexNs, indexType, existingSummary, overrides)
+        summaryResponse = summarizeTopics(indexNs, indexType, existingSummary, fullDocumentSummary, overrides)
         return ({
             "recordId": recordId,
             "data": summaryResponse
