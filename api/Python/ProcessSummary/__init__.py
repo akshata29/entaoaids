@@ -373,7 +373,6 @@ def generate_summary_from_chunks(client, chunks, prompt_options,DEBUG=False, chu
         partial_summaries_prompts = []
         partial_summaries_prompt2chunk = {}
         for x,chunk in enumerate(chunks):
-            #if DEBUG: logging.info ("Working on chunk",x+1,end = '')
             start_chunk_time = time.time()
             #note that partial summaries are always done in list format to maximize information captured.
             custom_prompt = get_prompt(chunk,prompt_options['prompt_type'],'list', prompt_options['manual_guidance'], prompt_options['style_guide'])
@@ -394,15 +393,41 @@ def generate_summary_from_chunks(client, chunks, prompt_options,DEBUG=False, chu
         if DEBUG: 
             logging.info ("Summarized chunks detected!")
             logging.info ("Creating joint summary...")
-            
+    
+    logging.info("Iterate over the chunks and extract the summaries.")
+    # Initialize an empty list and token count
     summaries_list = []
     summaries_list_token_count = 0
+
+    # Iterate over the chunks
     for chunk in chunks:
-        summaries_list.append(partial_summaries[chunk]) 
-        summaries_list_token_count+=count_tokens(partial_summaries[chunk])
-        
-    if DEBUG: logging.info("Chunk summaries token count:",summaries_list_token_count)
-    
+        try:
+            # Ensure chunk is valid for partial_summaries
+            if chunk not in partial_summaries:
+                logging.info("Chunk not found in partial_summaries")
+
+            # Extract the value from partial_summaries
+            summary = partial_summaries[chunk]
+
+            # Validate the summary type (ensure it's a string)
+            if not isinstance(summary, str):
+                logging.info("Expected a string but got summary")
+
+            # Append to summaries_list
+            summaries_list.append(summary)
+
+            # Increment token count using count_tokens
+            token_count = count_tokens(summary)
+            if not isinstance(token_count, int):
+                logging.info("Expected an integer but got token_count")
+
+            summaries_list_token_count += token_count
+
+        except Exception as e:
+            logging.info("Error processing chunk")
+
+    if DEBUG: logging.info ("Summaries extracted from chunks.")
+
     #check to see if the joint summary is too long.  If it is, recursivly itterate down.
     #we do this, rather than chunking again, so that summaries are not split.
     #it needs to be under 3000 tokens in order to be helpful to the summary (4000 is an expiremental number and may need to be adjusted.)
@@ -452,7 +477,7 @@ def generate_summary_from_chunks(client, chunks, prompt_options,DEBUG=False, chu
     
     return full_summary
 
-def generate_single_doc_summary(client, full_text, prompt_options,AUTO_REFINE=True, DEBUG=False,ALREADY_CHUNKED_AND_SUMMED=False):
+def generate_single_doc_summary(client, full_text, prompt_options,AUTO_REFINE=True, DEBUG=True,ALREADY_CHUNKED_AND_SUMMED=False):
     """
     This function uses the three helper functions, as well as the generate_summary_from_chunks above, to iteratively generate high quality summaries.
     AUTO_REFINE, if true, has the LLM generate a list of questions, and then recursivly calls this function with those questions for guidance.

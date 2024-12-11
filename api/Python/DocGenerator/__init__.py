@@ -36,7 +36,7 @@ from langchain_openai import AzureOpenAIEmbeddings
 import requests
 from io import BytesIO
 from unstructured.chunking.title import chunk_by_title
-from langchain.vectorstores.azuresearch import AzureSearch
+from langchain_community.vectorstores import AzureSearch
 from unstructured.cleaners.core import clean_extra_whitespace, group_broken_paragraphs
 
 def PartitionFile(fileExtension: str, fileName: str):      
